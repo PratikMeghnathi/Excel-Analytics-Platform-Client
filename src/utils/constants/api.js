@@ -8,7 +8,8 @@
  * @constant {string}
  * @default 'http://localhost:8080/api'
  */
-export const API_BASE_URL = 'http://localhost:5000/api'
+// export const API_BASE_URL = 'http://localhost:5000/api'
+export const API_BASE_URL = 'https://excel-analytics-platform-server.onrender.com/api'
 
 /**
  * Collection of API endpoints organized by feature
