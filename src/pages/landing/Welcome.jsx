@@ -55,7 +55,7 @@ function Welcome() {
             A powerful MERN stack platform for uploading Excel files, analyzing data, and generating interactive 2D and
             3D charts. Transform your spreadsheet data into actionable insights with AI-powered analysis.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link to={PATHS.SIGNUP}>
               <button className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors font-medium flex items-center gap-2">
                 <Upload className="w-4 h-4" />
