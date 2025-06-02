@@ -15,11 +15,6 @@ const processQueue = (error) => {
     failedQueue = [];
 };
 
-/**
- * Navigate to signin page with redirect parameter
- * @function redirectToSignin
- * @private
- */
 const redirectToSignin = () => {
     if (typeof window !== 'undefined') {
         localStorage.setItem('auth_redirect_triggered', 'true');
@@ -30,6 +25,23 @@ const redirectToSignin = () => {
         }
     }
 };
+
+const redirectToForbidden = () => {
+    if (typeof window !== 'undefined') {
+        const currentPath = window.location.pathname;
+        if (!currentPath.includes('/forbidden')) {
+            window.location.href = '/forbidden';
+        }
+    }
+};
+
+// if URL contains admin-related paths, redirect to forbidden
+const isAdminRequest = (url) => {
+    const adminPaths = ['/admin'];
+    return adminPaths.some(path => url.includes(path));
+};
+
+
 
 /**
  * Configures request and response interceptors for an Axios instance
@@ -65,6 +77,9 @@ export const setupInterceptors = (apiClient = axios.create()) => {
             const originalRequest = error.config;
 
             if (apiError.status === 401) {
+                if (originalRequest.url?.includes('/delete-my-account')) { 
+                    return Promise.reject(apiError);
+                }
                 if (apiError.errorCode === API_ERROR_CODES.TOKEN_EXPIRED && !originalRequest._retry) {
                     if (isRefreshing) {
                         return new Promise((resolve, reject) => {
@@ -91,7 +106,7 @@ export const setupInterceptors = (apiClient = axios.create()) => {
                         window.dispatchEvent(
                             new CustomEvent('auth-event', {
                                 detail: {
-                                    type: API_ERROR_CODES.TOKEN_EXPIRED,
+                                    type: 'auth-invalid',
                                     message: refreshTokenApiError.message || 'Your session has expired. Please sign in again.',
                                     status: refreshTokenApiError.status
                                 }
@@ -116,7 +131,7 @@ export const setupInterceptors = (apiClient = axios.create()) => {
                     window.dispatchEvent(
                         new CustomEvent('auth-event', {
                             detail: {
-                                type: 'auth-error',
+                                type: 'auth-invalid',
                                 message: apiError.message || 'Invalid or missing token. Please sign in again.',
                                 status: apiError.status,
                             }
@@ -134,7 +149,7 @@ export const setupInterceptors = (apiClient = axios.create()) => {
                     window.dispatchEvent(
                         new CustomEvent('auth-event', {
                             detail: {
-                                type: 'auth-error',
+                                type: 'auth-invalid',
                                 message: apiError.message || 'Authentication failed. Please sign in again.',
                                 status: apiError.status
                             }
@@ -146,15 +161,20 @@ export const setupInterceptors = (apiClient = axios.create()) => {
 
             if (apiError.status === 403) {
                 handleApiError(apiError);
-                window.dispatchEvent(
-                    new CustomEvent('auth-event', {
-                        detail: {
-                            type: 'auth-error',
-                            message: apiError.message || 'Access forbidden.',
-                            status: apiError.status,
-                        },
-                    })
-                );
+
+                const shouldRedirect = isAdminRequest(originalRequest.url || '');
+                if (shouldRedirect) {
+                    // Admin request - redirect to forbidden page
+                    window.dispatchEvent(
+                        new CustomEvent('permission-error', {
+                            detail: {
+                                message: apiError.message || 'Admin access required. You do not have permission to access this resource.',
+                                status: apiError.status
+                            }
+                        })
+                    );
+                    redirectToForbidden();
+                }
                 return Promise.reject(apiError);
             }
 

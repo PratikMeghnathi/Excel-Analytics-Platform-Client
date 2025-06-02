@@ -31,7 +31,7 @@ const saveAnalysis = async (data) => {
         return { success: true, data: res.data };
     } catch (error) {
         console.log('Error in api/analysis/saveAnalysis: ', error)
-        const { fieldErrors, genericErrors } = handleApiError(error);
+        const { fieldErrors, genericErrors } = handleApiError(error, ['analysisLimit']);
         return { success: false, fieldErrors, genericErrors };
     }
 }

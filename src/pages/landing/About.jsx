@@ -1,154 +1,283 @@
-import React from 'react';
-import { Link } from 'react-router'; // Updated import for react-router-dom
-import { PATHS } from '@/utils';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components';
+"use client"
+
+import { PATHS } from "@/utils"
+import { Link } from "react-router-dom"
+import { Github, Linkedin, Mail, Code, Database, Palette, Brain } from "lucide-react"
 
 function About() {
-    const teamMembers = [
-        {
-            name: 'Pratik Meghnathi',
-            role: 'Lead Developer',
-            desc: 'Highly skilled full-stack developer passionate about impactful web applications.',
-            img: 'https://randomuser.me/api/portraits/men/21.jpg',
-        },
-        {
-            name: 'Swapnil Kanthiwar',
-            role: 'UI/UX Designer',
-            desc: 'Focused on intuitive and visually appealing interfaces that enhance user experience.',
-            img: 'https://randomuser.me/api/portraits/men/11.jpg',
-        },
-        {
-            name: 'Gopal Kute',
-            role: 'Backend Developer',
-            desc: 'Specializes in backend architecture and scalable application development.',
-            img: 'https://randomuser.me/api/portraits/men/22.jpg',
-        },
-    ];
-    const techStack = [
-        { src: 'https://img.icons8.com/color/50/react-native.png', alt: 'React', url: 'https://reactjs.org/' },
-        { src: 'https://img.icons8.com/color/50/nodejs.png', alt: 'NodeJS', url: 'https://nodejs.org/' },
-        { src: 'https://img.icons8.com/color/50/mongodb.png', alt: 'MongoDB', url: 'https://www.mongodb.com/' },
-        { src: 'https://www.vectorlogo.zone/logos/expressjs/expressjs-icon.svg', alt: 'Express.js', url: 'https://expressjs.com/' },
-        { src: 'https://img.icons8.com/color/50/tailwind_css.png', alt: 'Tailwind CSS', url: 'https://tailwindcss.com/' },
-        { src: 'https://img.icons8.com/color/50/javascript.png', alt: 'JavaScript', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
-        { src: 'https://img.icons8.com/color/50/html-5.png', alt: 'HTML5', url: 'https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5' },
-        { src: 'https://img.icons8.com/color/50/css3.png', alt: 'CSS3', url: 'https://developer.mozilla.org/en-US/docs/Web/CSS' },
-        { src: 'https://img.icons8.com/fluency/50/github.png', alt: 'GitHub', url: 'https://github.com/' },
-        { src: 'https://img.icons8.com/color/50/figma.png', alt: 'Figma', url: 'https://www.figma.com/' },
-        { src: 'https://ui.shadcn.com/favicon.ico', alt: 'shadcn/ui', url: 'https://ui.shadcn.com/' }, // Favicon as a fallback
-    ];
+  const projectDetails = {
+    type: "MERN Stack Full-Stack Project",
+    duration: "5-week development period",
+    structure: "1-week modules with structured goals",
+    purpose: "Student project for hands-on experience with complete application development",
+  }
 
-    const coreValues = [
-        { title: 'Innovation', text: 'We are driven by creativity and innovation to deliver cutting-edge solutions.' },
-        { title: 'Collaboration', text: 'We believe in teamwork, shared knowledge, and mutual support.' },
-        { title: 'Excellence', text: 'We strive for the highest quality in everything we do.' },
-    ];
+  const teamMembers = [
+    {
+      name: "Pratik Meghnathi",
+      role: "Full-Stack Developer",
+      description: "MERN stack specialists focused on creating a comprehensive Excel analytics solution.",
+      skills: ["React.js", "Node.js", "MongoDB", "Express.js"],
+      social: {
+        github: "https://github.com/PratikMeghnathi",
+        linkedin: "https://www.linkedin.com/in/pratik-meghnathi-29b7402a2/",
+        email: "pratikmeghnathi050@gmail.com",
+      },
+    },
+  ]
 
-    return (
-        <main className="bg-gradient-to-r from-teal-500 to-blue-600 dark:from-gray-900 dark:to-gray-800 text-white">
-            {/* Hero */}
-            <section className="container mx-auto text-center py-20 px-4">
-                <h1 className="text-5xl font-bold mb-4">Meet Our Team</h1>
-                <p className="text-lg max-w-2xl mx-auto">
-                    A team of passionate individuals working together to deliver results.
-                </p>
-            </section>
+  const techStack = {
+    frontend: [
+      { name: "React.js", description: "Component-based UI framework" },
+      { name: "Shadcn/ui", description: "Accessible and customizable component library" },
+      { name: "Tailwind CSS", description: "Utility-first styling" },
+      { name: "Plotly.js", description: "Interactive 2D and 3D chart generation" },
+      { name: "Three.js", description: "3D visualizations with .glb export support" },
+    ],
+    backend: [
+      { name: "Node.js", description: "JavaScript runtime" },
+      { name: "Express.js", description: "Web application framework" },
+      { name: "MongoDB", description: "NoSQL database" },
+      { name: "Multer", description: "File upload handling" },
+      { name: "Xlsx", description: "Excel file parsing" },
+    ],
+    optional: [
+      { name: "Gemini API", description: "AI insights generation" },
+      { name: "Hoppscotch", description: "API testing" },
+      { name: "GitHub", description: "Version control" },
+      { name: "Redis", description: "Temporary data storage" },
+      { name: "Mailjet", description: "Email delivery service" },
+    ],
+  }
 
-            {/* Team Members */}
-            <section className="bg-background text-foreground py-20">
-                <div className="container mx-auto px-4">
-                    <h2 className="text-4xl font-bold text-center mb-12">Our Dedicated Team</h2>
-                    <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-                        {teamMembers.map((member, index) => (
-                            <div
-                                key={index}
-                                className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition duration-300"
-                            >
-                                <img
-                                    src={member.img}
-                                    alt={member.name}
-                                    className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
-                                />
-                                <h3 className="text-xl font-semibold text-center">{member.name}</h3>
-                                <p className="text-center text-teal-600 dark:text-teal-400 mb-2">{member.role}</p>
-                                <p className="text-sm text-center text-gray-600 dark:text-gray-400">{member.desc}</p>
-                            </div>
-                        ))}
+  const developmentPhases = [
+    {
+      week: "Week 1",
+      title: "Project Setup & Authentication",
+      tasks: ["User/admin authentication", "Dashboard layout", "Basic project structure"],
+    },
+    {
+      week: "Week 2",
+      title: "File Upload & Data Processing",
+      tasks: ["Excel file upload", "SheetJS parsing", "Data storage in MongoDB"],
+    },
+    {
+      week: "Week 3",
+      title: "Chart Generation",
+      tasks: ["Chart.js & Three.js integration", "Dynamic axis selection", "Chart rendering"],
+    },
+    {
+      week: "Week 4",
+      title: "Analysis & Features",
+      tasks: ["Save analysis history", "Download functionality", "AI API integration"],
+    },
+    {
+      week: "Week 5",
+      title: "Admin Panel & Testing",
+      tasks: ["Admin dashboard", "Bug fixes", "Testing", "Deployment preparation"],
+    },
+  ]
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8 sm:py-12">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">About Excel Analytics Platform</h1>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            A comprehensive MERN stack project designed for students to gain hands-on experience with complete
+            application development, from Excel data processing to AI-powered insights.
+          </p>
+        </div>
+
+        {/* Project Overview */}
+        <div className="bg-card border border-border rounded-lg p-6 sm:p-8 mb-12">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">Project Overview</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold text-card-foreground mb-3">Project Details</h3>
+              <ul className="space-y-2">
+                <li className="flex items-start gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                  <span className="text-muted-foreground">
+                    <strong>Type:</strong> {projectDetails.type}
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                  <span className="text-muted-foreground">
+                    <strong>Duration:</strong> {projectDetails.duration}
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                  <span className="text-muted-foreground">
+                    <strong>Structure:</strong> {projectDetails.structure}
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                  <span className="text-muted-foreground">
+                    <strong>Purpose:</strong> {projectDetails.purpose}
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-card-foreground mb-3">Key Learning Objectives</h3>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2">
+                  <Code className="w-4 h-4 text-primary" />
+                  <span className="text-muted-foreground">Full-stack development with MERN</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Database className="w-4 h-4 text-primary" />
+                  <span className="text-muted-foreground">File processing and data management</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Palette className="w-4 h-4 text-primary" />
+                  <span className="text-muted-foreground">Data visualization techniques</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Brain className="w-4 h-4 text-primary" />
+                  <span className="text-muted-foreground">AI API integration</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Development Timeline */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-semibold text-foreground text-center mb-8">Development Timeline</h2>
+          <div className="space-y-4">
+            {developmentPhases.map((phase, index) => (
+              <div key={index} className="bg-card border border-border rounded-lg p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                  <div className="flex-shrink-0">
+                    <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
+                      {phase.week}
+                    </span>
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className="text-lg font-semibold text-card-foreground mb-2">{phase.title}</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {phase.tasks.map((task, idx) => (
+                        <span key={idx} className="bg-muted text-muted-foreground px-2 py-1 rounded text-sm">
+                          {task}
+                        </span>
+                      ))}
                     </div>
+                  </div>
                 </div>
-            </section>
+              </div>
+            ))}
+          </div>
+        </div>
 
-            {/* Core Values */}
-            <section className="bg-gray-100 dark:bg-gray-900 text-foreground py-20">
-                <div className="container mx-auto px-4">
-                    <h2 className="text-4xl font-bold text-center mb-12">Our Core Values</h2>
-                    <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-                        {coreValues.map((value, idx) => (
-                            <div key={idx} className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow">
-                                <h3 className="text-2xl font-semibold mb-2">{value.title}</h3>
-                                <p className="text-gray-600 dark:text-gray-400">{value.text}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+        {/* Technology Stack */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-semibold text-foreground text-center mb-8">Technology Stack & Tools</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-card-foreground mb-4">Frontend</h3>
+              <div className="space-y-3">
+                {techStack.frontend.map((tech, index) => (
+                  <div key={index}>
+                    <div className="font-medium text-card-foreground">{tech.name}</div>
+                    <div className="text-sm text-muted-foreground">{tech.description}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-card-foreground mb-4">Backend</h3>
+              <div className="space-y-3">
+                {techStack.backend.map((tech, index) => (
+                  <div key={index}>
+                    <div className="font-medium text-card-foreground">{tech.name}</div>
+                    <div className="text-sm text-muted-foreground">{tech.description}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-card-foreground mb-4">Optional Tools</h3>
+              <div className="space-y-3">
+                {techStack.optional.map((tech, index) => (
+                  <div key={index}>
+                    <div className="font-medium text-card-foreground">{tech.name}</div>
+                    <div className="text-sm text-muted-foreground">{tech.description}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
 
-            {/* Mission & Vision */}
-            <section className="bg-gradient-to-r from-blue-600 to-teal-500 dark:from-gray-900 dark:to-gray-800 text-white text-center py-20 px-4">
-                <div className="container mx-auto">
-                    <h2 className="text-4xl font-bold mb-6">Our Mission & Vision</h2>
-                    <p className="text-lg max-w-2xl mx-auto">
-                        Our mission is to empower businesses with innovative solutions that foster growth and success.
-                        We envision a world where technology bridges challenges and solutions.
-                    </p>
+        {/* Team Section */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-semibold text-foreground text-center mb-8">Development Team</h2>
+          <div className="max-w-2xl mx-auto">
+            {teamMembers.map((member, index) => (
+              <div key={index} className="bg-card border border-border rounded-lg p-6 text-center">
+                <h3 className="text-xl font-semibold text-card-foreground mb-2">{member.name}</h3>
+                <p className="text-primary font-medium mb-3">{member.role}</p>
+                <p className="text-muted-foreground text-sm mb-4">{member.description}</p>
+                <div className="flex flex-wrap justify-center gap-2 mb-4">
+                  {member.skills.map((skill, idx) => (
+                    <span key={idx} className="bg-muted text-muted-foreground px-2 py-1 rounded text-sm">
+                      {skill}
+                    </span>
+                  ))}
                 </div>
-            </section>
+                <div className="flex justify-center gap-3">
+                  <a
+                    href={member.social.github}
+                    className="p-2 bg-muted rounded-md hover:bg-muted/80 transition-colors"
+                  >
+                    <Github className="w-4 h-4 text-muted-foreground" />
+                  </a>
+                  <a
+                    href={member.social.linkedin}
+                    className="p-2 bg-muted rounded-md hover:bg-muted/80 transition-colors"
+                  >
+                    <Linkedin className="w-4 h-4 text-muted-foreground" />
+                  </a>
+                  <a
+                    href={`mailto:${member.social.email}`}
+                    className="p-2 bg-muted rounded-md hover:bg-muted/80 transition-colors"
+                  >
+                    <Mail className="w-4 h-4 text-muted-foreground" />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-            {/* Technologies */}
-            <section className="bg-background text-foreground py-20 text-center">
-                <div className="container mx-auto px-4">
-                    <h2 className="text-4xl font-bold mb-12">Technologies We Work With</h2>
-                    <div className="flex flex-wrap justify-center gap-8">
-                        {techStack.map((tech, index) => (
-                            <TooltipProvider key={index}>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <a
-                                            href={tech.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="w-24 h-24 flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-full shadow-md cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-110"
-                                        >
-                                            <img
-                                                src={tech.src}
-                                                alt={tech.alt}
-                                                className="w-10 h-10 object-contain"
-                                            />
-                                        </a>
-                                    </TooltipTrigger>
-                                    <TooltipContent side="bottom">
-                                        <p>{tech.alt}</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Call to Action */}
-            <section className="bg-gradient-to-r from-blue-600 to-teal-500 dark:from-gray-900 dark:to-gray-800 text-white text-center py-20 px-4">
-                <div className="container mx-auto">
-                    <h2 className="text-4xl font-bold mb-6">Join Our Team</h2>
-                    <Link to={PATHS.SIGNUP}>
-                        <button className="bg-white dark:bg-gray-800 text-blue-600 dark:text-white font-bold py-3 px-6 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer">
-                            Apply Now
-                        </button>
-                    </Link>
-                </div>
-            </section>
-        </main>
-    );
+        {/* Contact CTA */}
+        <div className="text-center bg-muted/30 rounded-lg p-8">
+          <h2 className="text-2xl font-semibold text-foreground mb-4">Interested in the project?</h2>
+          <p className="text-muted-foreground mb-6">
+            Want to learn more about our development process or contribute to the project?
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to={PATHS.CONTACT}>
+              <button className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors font-medium">
+                Contact Team
+              </button>
+            </Link>
+            <Link to={PATHS.FEATURES}>
+              <button className="px-6 py-3 bg-muted text-muted-foreground rounded-md hover:bg-muted/80 transition-colors font-medium">
+                View Features
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
-export default About;
+export default About

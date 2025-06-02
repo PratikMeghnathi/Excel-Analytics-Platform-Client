@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
-import { BarChart3, Upload, Users, Edit, ChevronDown, ChevronUp } from "lucide-react"
+import { BarChart3, Upload, Users, Edit, ChevronDown, ChevronUp, Clock, Activity, FileBarChart } from "lucide-react"
 import { useTheme } from "@/hooks"
 import { useLoaderData, useNavigation } from "react-router-dom"
 import { useImmer } from "use-immer"
-import { showGenericErrorAsToast, TOAST_OPTIONS } from "@/utils"
+import { ERROR_TOAST_OPTIONS, showGenericErrorAsToast, SUCCESS_TOAST_OPTIONS, TOAST_OPTIONS } from "@/utils"
 import toast from "react-hot-toast"
 import { updateUser } from "@/api"
 
@@ -13,19 +13,23 @@ const UserEditModal = ({ user, isOpen, onClose, onSave, isUserUpdating }) => {
     permissions: user?.permissions || "Read Only",
     uploadLimit: user?.uploadLimit || "",
     analysisLimit: user?.analysisLimit || "",
-    isUploadUnrestricted: user?.uploadLimit === "unrestricted" || user?.uploadLimit === "",
-    isAnalysisUnrestricted: user?.analysisLimit === "unrestricted" || user?.analysisLimit === "",
+    isUploadUnrestricted: user?.uploadLimit === "unrestricted" || user?.uploadLimit === -1,
+    isAnalysisUnrestricted: user?.analysisLimit === "unrestricted" || user?.analysisLimit === -1,
+    analyses: user?.analyses || "",
+    uploads: user?.uploads || "",
   })
 
   useEffect(() => {
     if (user) {
       updateEditUser((draft) => {
-        draft.id = user.id || ""
-        draft.permissions = user.permissions || "Read Only"
-        draft.uploadLimit = user.uploadLimit === "unrestricted" ? "" : user.uploadLimit || ""
-        draft.analysisLimit = user.analysisLimit === "unrestricted" ? "" : user.analysisLimit || ""
-        draft.isUploadUnrestricted = user.uploadLimit === "unrestricted" || !user.uploadLimit
-        draft.isAnalysisUnrestricted = user.analysisLimit === "unrestricted" || !user.analysisLimit
+        draft.id = user.id || "";
+        draft.permissions = user.permissions || "Read Only";
+        draft.uploadLimit = user.uploadLimit === "unrestricted" || user.uploadLimit === -1 ? "" : user.uploadLimit || "";
+        draft.analysisLimit = user.analysisLimit === "unrestricted" || user.analysisLimit === -1 ? "" : user.analysisLimit || "";
+        draft.isUploadUnrestricted = user.uploadLimit === "unrestricted" || user.uploadLimit === -1;
+        draft.isAnalysisUnrestricted = user.analysisLimit === "unrestricted" || user.analysisLimit === -1;
+        draft.analyses = user?.analyses || 0;
+        draft.uploads = user?.uploads || 0;
       })
     }
   }, [user, updateEditUser])
@@ -35,13 +39,15 @@ const UserEditModal = ({ user, isOpen, onClose, onSave, isUserUpdating }) => {
   const handleSave = () => {
     const dataToSave = {
       ...editUser,
-      uploadLimit: editUser.isUploadUnrestricted ? "unrestricted" : Number.parseInt(editUser.uploadLimit) || 0,
-      analysisLimit: editUser.isAnalysisUnrestricted ? "unrestricted" : Number.parseInt(editUser.analysisLimit) || 0,
+      uploadLimit: editUser.isUploadUnrestricted ? -1 : Number.parseInt(editUser.uploadLimit) || 0,
+      analysisLimit: editUser.isAnalysisUnrestricted ? -1 : Number.parseInt(editUser.analysisLimit) || 0,
     }
 
     // Remove the checkbox states from the saved data
     delete dataToSave.isUploadUnrestricted
     delete dataToSave.isAnalysisUnrestricted
+    delete dataToSave.analyses
+    delete dataToSave.uploads
 
     onSave(dataToSave)
   }
@@ -79,17 +85,17 @@ const UserEditModal = ({ user, isOpen, onClose, onSave, isUserUpdating }) => {
           <div>
             <label className="block mb-1 font-medium text-sm text-muted-foreground">Permissions</label>
             <select
+              className="w-full p-2 sm:p-3 rounded border bg-muted border-primary/10  text-sm focus:outline-none"
               value={editUser.permissions}
               onChange={(e) =>
                 updateEditUser((draft) => {
                   draft.permissions = e.target.value
                 })
               }
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary bg-card text-sm"
               disabled={isUserUpdating}
             >
-              <option value="Full Access">Full Access</option>
-              <option value="Read Only">Read Only</option>
+              <option className="bg-secondary text-secondary-foreground text-sm" value="Full Access">Full Access</option>
+              <option className="bg-secondary text-secondary-foreground text-sm" value="Read Only">Read Only</option>
             </select>
           </div>
 
@@ -104,7 +110,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSave, isUserUpdating }) => {
                   name="uploadLimitType"
                   checked={editUser.isUploadUnrestricted}
                   onChange={() => handleUploadLimitToggle(true)}
-                  className="text-primary focus:ring-primary"
+                  className="cursor-pointer accent-muted-foreground"
                   disabled={isUserUpdating}
                 />
                 <label htmlFor="upload-unrestricted" className="text-sm text-muted-foreground">
@@ -119,7 +125,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSave, isUserUpdating }) => {
                     name="uploadLimitType"
                     checked={!editUser.isUploadUnrestricted}
                     onChange={() => handleUploadLimitToggle(false)}
-                    className="text-primary focus:ring-primary"
+                    className="cursor-pointer accent-muted-foreground"
                     disabled={isUserUpdating}
                   />
                   <label htmlFor="upload-limited" className="text-sm text-muted-foreground whitespace-nowrap">
@@ -140,7 +146,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSave, isUserUpdating }) => {
                   disabled={editUser.isUploadUnrestricted || isUserUpdating}
                   placeholder="Enter number"
                   className="w-full sm:flex-1 px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-primary bg-card text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                  min="0"
+                  min={editUser.uploads}
                 />
               </div>
             </div>
@@ -157,7 +163,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSave, isUserUpdating }) => {
                   name="analysisLimitType"
                   checked={editUser.isAnalysisUnrestricted}
                   onChange={() => handleAnalysisLimitToggle(true)}
-                  className="text-primary focus:ring-primary"
+                  className="cursor-pointer accent-muted-foreground"
                   disabled={isUserUpdating}
                 />
                 <label htmlFor="analysis-unrestricted" className="text-sm text-muted-foreground">
@@ -172,7 +178,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSave, isUserUpdating }) => {
                     name="analysisLimitType"
                     checked={!editUser.isAnalysisUnrestricted}
                     onChange={() => handleAnalysisLimitToggle(false)}
-                    className="text-primary focus:ring-primary"
+                    className="cursor-pointer accent-muted-foreground"
                     disabled={isUserUpdating}
                   />
                   <label htmlFor="analysis-limited" className="text-sm text-muted-foreground whitespace-nowrap">
@@ -193,7 +199,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSave, isUserUpdating }) => {
                   disabled={editUser.isAnalysisUnrestricted || isUserUpdating}
                   placeholder="Enter number"
                   className="w-full sm:flex-1 px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-primary bg-card text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                  min="0"
+                  min={editUser.analyses}
                 />
               </div>
             </div>
@@ -234,6 +240,12 @@ const UserEditModal = ({ user, isOpen, onClose, onSave, isUserUpdating }) => {
 
 const UserCard = ({ user, onEdit }) => {
   const [isExpanded, setIsExpanded] = useState(false)
+
+  // Format the limit display
+  const formatLimit = (limit) => {
+    if (limit === -1) return "Unlimited"
+    return limit
+  }
 
   return (
     <div className="border rounded-lg p-4 bg-card">
@@ -277,6 +289,14 @@ const UserCard = ({ user, onEdit }) => {
             <div className="flex justify-between">
               <span className="text-muted-foreground">Recent Analyses:</span>
               <span className="font-medium">{user.recentAnalyses}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Upload Limit:</span>
+              <span className="font-medium">{formatLimit(user.uploadLimit)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Analysis Limit:</span>
+              <span className="font-medium">{formatLimit(user.analysisLimit)}</span>
             </div>
           </div>
         )}
@@ -335,13 +355,16 @@ const AdminPage = () => {
   const [analyticsStats, updateAnalyticsStats] = useImmer({
     uploadFrequency: 0,
     peakUploadTime: "",
+    peakUploadCount: 0,
     usageRate: 0,
+    totalRecentUploads: 0,
+    totalUploadsAllTime: 0,
   })
   const [isUserUpdating, setIsUserUpdating] = useState(false)
 
   useEffect(() => {
     if (!response?.data) {
-      toast.error("No data in response", TOAST_OPTIONS)
+      toast.error("No data in response", ERROR_TOAST_OPTIONS)
       return
     }
     const { basicStats, userStats, analyticsStats } = response.data
@@ -363,6 +386,7 @@ const AdminPage = () => {
           user.email ||
           (user.name ? `${user.name.toLowerCase().replace(/\s+/g, ".")}@company.com` : "unknown@company.com"),
         permissions: user.permissions || "Read Only",
+        status: user.status || "Active",
 
         uploads: user.activity?.uploads || 0,
         analyses: user.activity?.savedAnalyses || 0,
@@ -370,13 +394,17 @@ const AdminPage = () => {
         recentUploads: user.activity?.recentActivity?.uploads || 0,
         recentAnalyses: user.activity?.recentActivity?.analyses || 0,
 
-        uploadLimit: user.uploadLimit === "unrestricted" ? "Unrestricted" : user.uploadLimit,
-        analysisLimit: user.analysisLimit === "unrestricted" ? "Unrestricted" : user.analysisLimit,
+        uploadLimit: user.uploadLimit,
+        analysisLimit: user.analysisLimit,
 
         activity: user.activity || {},
-        isActive: Boolean(
-          user.activity && (user.activity?.recentActivity?.uploads > 0 || user.activity?.recentActivity?.analyses > 0),
-        ),
+        isActive:
+          user.isActive ||
+          Boolean(
+            user.activity &&
+            (user.activity?.recentActivity?.uploads > 0 || user.activity?.recentActivity?.analyses > 0),
+          ),
+        lastActivity: user.lastActivity ? new Date(user.lastActivity).toLocaleDateString() : "N/A",
       }))
       updateUsers(processedUsers)
     }
@@ -385,7 +413,10 @@ const AdminPage = () => {
       updateAnalyticsStats((draft) => {
         draft.uploadFrequency = analyticsStats.uploadFrequency || 0
         draft.peakUploadTime = analyticsStats.peakUploadTime || "N/A"
+        draft.peakUploadCount = analyticsStats.peakUploadCount || 0
         draft.usageRate = analyticsStats.usageRate || 0
+        draft.totalRecentUploads = analyticsStats.totalRecentUploads || 0
+        draft.totalUploadsAllTime = analyticsStats.totalUploadsAllTime || 0
       })
     }
   }, [response, updateStats, updateUsers, updateAnalyticsStats])
@@ -398,7 +429,6 @@ const AdminPage = () => {
   const handleUpdateUser = async (updatedUser) => {
     setIsUserUpdating(true)
     try {
-      console.log(updatedUser)
       const { success, genericErrors } = await updateUser(updatedUser)
 
       if (success) {
@@ -408,14 +438,15 @@ const AdminPage = () => {
             draft[index] = { ...draft[index], ...updatedUser }
           }
         })
-        toast.success("User updated successfully", TOAST_OPTIONS)
+        toast.success("User updated successfully", SUCCESS_TOAST_OPTIONS)
         setIsEditModalOpen(false)
         return
       }
 
       showGenericErrorAsToast(genericErrors)
     } catch (error) {
-      console.log(error)
+      console.error(error)
+      toast.error("Failed to update user", ERROR_TOAST_OPTIONS)
     } finally {
       setIsUserUpdating(false)
     }
@@ -434,7 +465,7 @@ const AdminPage = () => {
       `Total Analyses,${stats.savedAnalyses}`,
       "",
       "USER DETAILS",
-      "Name,Email,Permissions,Uploads,Analyses,Status",
+      "Name,Email,Permissions,Uploads,Analyses,Status,Last Activity",
     ]
 
     // User data - essential columns only
@@ -446,6 +477,7 @@ const AdminPage = () => {
         user.uploads,
         user.analyses,
         user.isActive ? "Active" : "Inactive",
+        user.lastActivity,
       ].join(","),
     )
 
@@ -461,8 +493,20 @@ const AdminPage = () => {
       permissionBreakdown.push(`${permission},${count}`)
     })
 
+    // Analytics data
+    const analyticsData = [
+      "",
+      "ANALYTICS DATA",
+      `Upload Frequency,${analyticsStats.uploadFrequency}`,
+      `Peak Upload Time,${analyticsStats.peakUploadTime}`,
+      `Peak Upload Count,${analyticsStats.peakUploadCount}`,
+      `Usage Rate,${analyticsStats.usageRate}%`,
+      `Recent Uploads,${analyticsStats.totalRecentUploads}`,
+      `Total Uploads,${analyticsStats.totalUploadsAllTime}`,
+    ]
+
     // Combine everything
-    const csvContent = [...systemStats, ...userData, ...permissionBreakdown].join("\n")
+    const csvContent = [...systemStats, ...userData, ...permissionBreakdown, ...analyticsData].join("\n")
 
     // Download
     const blob = new Blob([csvContent], { type: "text/csv" })
@@ -475,7 +519,13 @@ const AdminPage = () => {
     document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
 
-    toast.success("Usage report exported", TOAST_OPTIONS)
+    toast.success("Usage report exported", SUCCESS_TOAST_OPTIONS)
+  }
+
+  // Format the limit display
+  const formatLimit = (limit) => {
+    if (limit === -1) return "Unlimited"
+    return limit
   }
 
   // Computed stats from actual user data
@@ -535,6 +585,7 @@ const AdminPage = () => {
                     <th className="py-3 font-semibold text-left text-muted-foreground">Permissions</th>
                     <th className="py-3 font-semibold text-left text-muted-foreground">Total Activity</th>
                     <th className="py-3 font-semibold text-left text-muted-foreground">Recent Activity</th>
+                    <th className="py-3 font-semibold text-left text-muted-foreground">Limits</th>
                     <th className="py-3 font-semibold text-left text-muted-foreground">Status</th>
                     <th className="py-3 font-semibold text-left text-muted-foreground">Actions</th>
                   </tr>
@@ -561,6 +612,12 @@ const AdminPage = () => {
                         <div className="text-sm">
                           <div className="text-primary">{user.recentUploads} uploads</div>
                           <div className="text-muted-foreground">{user.recentAnalyses} analyses</div>
+                        </div>
+                      </td>
+                      <td className="py-3">
+                        <div className="text-sm">
+                          <div className="text-primary">Uploads: {formatLimit(user.uploadLimit)}</div>
+                          <div className="text-muted-foreground">Analyses: {formatLimit(user.analysisLimit)}</div>
                         </div>
                       </td>
                       <td className="py-3">
@@ -600,23 +657,60 @@ const AdminPage = () => {
       {/* Analytics & Reporting Section */}
       <div className="bg-card rounded-md shadow-md p-4 sm:p-6">
         <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-primary">Analytics & Reporting</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
           <div className="p-3 sm:p-4 border rounded">
-            <h3 className="font-semibold mb-2 text-muted-foreground text-sm sm:text-base">Upload Frequency</h3>
+            <div className="flex items-center gap-2 mb-2">
+              <Activity className="w-4 h-4 text-primary" />
+              <h3 className="font-semibold text-muted-foreground text-sm sm:text-base">Upload Frequency</h3>
+            </div>
             <p className="text-xl sm:text-2xl font-bold text-primary">{analyticsStats.uploadFrequency}</p>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1">avg per user</p>
           </div>
           <div className="p-3 sm:p-4 border rounded">
-            <h3 className="font-semibold mb-2 text-muted-foreground text-sm sm:text-base">Peak Upload Time</h3>
+            <div className="flex items-center gap-2 mb-2">
+              <Clock className="w-4 h-4 text-primary" />
+              <h3 className="font-semibold text-muted-foreground text-sm sm:text-base">Peak Upload Time</h3>
+            </div>
             <p className="text-lg sm:text-xl font-bold text-primary">{analyticsStats.peakUploadTime}</p>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1">most active hour</p>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">{analyticsStats.peakUploadCount} uploads</p>
           </div>
-          <div className="p-3 sm:p-4 border rounded sm:col-span-2 lg:col-span-1">
-            <h3 className="font-semibold mb-2 text-muted-foreground text-sm sm:text-base">Usage Rate</h3>
+          <div className="p-3 sm:p-4 border rounded">
+            <div className="flex items-center gap-2 mb-2">
+              <FileBarChart className="w-4 h-4 text-primary" />
+              <h3 className="font-semibold text-muted-foreground text-sm sm:text-base">Usage Rate</h3>
+            </div>
             <p className="text-xl sm:text-2xl font-bold text-primary">{analyticsStats.usageRate}%</p>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1">active users</p>
           </div>
         </div>
+
+        {/* Additional Analytics */}
+        <div className="bg-muted/30 p-4 rounded-md mb-6">
+          <h3 className="text-sm font-medium mb-3">Upload Statistics</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Recent Uploads:</span>
+              <span className="text-sm font-medium">{analyticsStats.totalRecentUploads}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Total Uploads (All Time):</span>
+              <span className="text-sm font-medium">{analyticsStats.totalUploadsAllTime}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Active Users:</span>
+              <span className="text-sm font-medium">
+                {computedStats.activeUsers} of {stats.totalUsers}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Last Updated:</span>
+              <span className="text-sm font-medium">
+                {response.data.timestamp ? new Date(response.data.timestamp).toLocaleString() : "N/A"}
+              </span>
+            </div>
+          </div>
+        </div>
+
         <button
           onClick={handleExportReport}
           className="w-full sm:w-auto px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition text-sm sm:text-base"

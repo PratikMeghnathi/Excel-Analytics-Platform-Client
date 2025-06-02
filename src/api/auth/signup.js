@@ -21,11 +21,11 @@ import apiClient from "../apiClient";
  */
 const signup = async (userData) => {
     try {
-        const { data } = await apiClient.post(API_ENDPOINTS.AUTH.SIGNUP, userData);
-        return { success: true, data };
+        const res = await apiClient.post(API_ENDPOINTS.AUTH.SIGNUP, userData);
+        return { success: true, data: res.data };
     } catch (error) {
         console.log('Error in api/auth/signup: ', error)
-        const { fieldErrors, genericErrors } = handleApiError(error, ['email']);
+        const { fieldErrors, genericErrors } = handleApiError(error, ['input', 'email', 'password']);
         return { success: false, fieldErrors, genericErrors };
     }
 }

@@ -21,7 +21,6 @@ import apiClient from "../apiClient";
  * @returns {Promise<ApiResponse>} The response object
  */
 const updateUser = async (data) => {
-    console.log(data);
     try {
         const res = await apiClient.patch(API_ENDPOINTS.UPDATE_USER, data);
         return { success: true, data: res.data };

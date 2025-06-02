@@ -1,15 +1,10 @@
-import {
-  BarChart2Icon,
-  ScatterChartIcon as ChartScatter,
-  BarChartIcon as ChartSpline,
-  PieChartIcon,
-  Trash,
-} from "lucide-react"
-import { formatDate } from "@/utils"
-import { Cube } from "@phosphor-icons/react/dist/ssr"
+"use client"
 
-function AnalysisCard({ analysis, onClick, onRemove, compact = false }) {
-  const { name, filename, sheetName, chartConfig, createdAt, dataSample, _id } = analysis
+import { Trash, BarChart2, PieChart, ScatterChart, LineChart, Box, Brain } from "lucide-react"
+import { formatDate } from "@/utils"
+
+function AnalysisCard({ analysis, onClick, onRemove, compact = false, canDelete = true }) {
+  const { name, filename, sheetName, chartConfig, createdAt, dataSample, _id, hasAiInsights } = analysis
 
   const handleRemove = (e) => {
     e.stopPropagation()
@@ -21,13 +16,22 @@ function AnalysisCard({ analysis, onClick, onRemove, compact = false }) {
       className="border rounded-sm overflow-hidden p-2 sm:p-3 bg-card hover:shadow-md transition-shadow cursor-pointer flex flex-col gap-1.5 h-full group min-h-[200px] sm:min-h-[250px]"
       onClick={() => onClick(analysis)}
     >
-      {/* Header with title and remove button */}
+      {/* Header with title, AI indicator, and remove button */}
       <div className="flex justify-between gap-2 sm:gap-3 items-start mb-2">
-        <span className="text-sm sm:text-md font-medium text-foreground truncate leading-tight">{name}</span>
-        {onRemove && (
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <span className="text-sm sm:text-md font-medium text-foreground truncate leading-tight">{name}</span>
+          {hasAiInsights && (
+            <div className="flex-shrink-0" title="Contains AI insights">
+              <Brain className="w-3.5 h-3.5 text-primary" />
+            </div>
+          )}
+        </div>
+        {/* Only show delete button if user has permission */}
+        {onRemove && canDelete && (
           <div
             className="opacity-0 group-hover:opacity-100 transition duration-200 hover:bg-accent text-accent-foreground hover:text-destructive rounded-sm p-1 flex-shrink-0"
             onClick={handleRemove}
+            title="Delete analysis"
           >
             <Trash size={14} className="sm:w-4 sm:h-4" />
           </div>
@@ -94,17 +98,17 @@ function AnalysisCard({ analysis, onClick, onRemove, compact = false }) {
           <div className="text-muted-foreground text-xs sm:text-sm flex flex-col items-center gap-1">
             <span className="text-lg sm:text-xl">
               {chartConfig.chartType === "bar" ? (
-                <BarChart2Icon />
+                <BarChart2 />
               ) : chartConfig.chartType === "pie" ? (
-                <PieChartIcon />
+                <PieChart />
               ) : chartConfig.chartType === "scatter" ? (
-                <ChartScatter />
+                <ScatterChart />
               ) : chartConfig.chartType === "line" ? (
-                <ChartSpline />
+                <LineChart />
               ) : chartConfig.chartType.includes("3d") ? (
-                <Cube size={20} />
+                <Box size={20} />
               ) : (
-                <BarChart2Icon />
+                <BarChart2 />
               )}
             </span>
             <span className="text-center leading-tight">

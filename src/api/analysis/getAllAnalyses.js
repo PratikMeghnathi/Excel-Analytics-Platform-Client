@@ -24,8 +24,6 @@ const getAllAnalyses = async (limit) => {
             ? `${API_ENDPOINTS.GET_ALL_ANALYSES}?limit=${limit}`
             : API_ENDPOINTS.GET_ALL_ANALYSES;
 
-        console.log(url)
-
         const res = await apiClient.get(url);
         return { success: true, data: res.data };
     } catch (error) {

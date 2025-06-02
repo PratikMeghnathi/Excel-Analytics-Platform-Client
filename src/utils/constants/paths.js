@@ -24,6 +24,8 @@ const PATHS = {
     // auth routes
     SIGNUP: "/sign-up",
     SIGNIN: "/sign-in",
+    VERIFY_EMAIL: "/verify-email",
+    RESET_PASSWORD: "/reset-password",
 
     // landing page routes
     WELCOME: "/welcome",
@@ -42,7 +44,7 @@ const PATHS = {
     ADMIN_PANEL: "admin-panel",
 
     // other routes
-    FORBIDDEN: "/FORBIDDEN",
+    FORBIDDEN: "/forbidden",
     NOT_FOUND: "*",
 };
 

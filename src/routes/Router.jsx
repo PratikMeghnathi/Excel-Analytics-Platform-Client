@@ -7,10 +7,10 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { PATHS } from "@/utils";
 import { DashboardLayout, LandingLayout } from "@/layout";
-import { About, AdminPage, AnalysisHistory, Contact, Dashboard, Features, FileUpload, Forbidden, NotFound, PrivacyPolicy, Signin, Signup, TermsOfServices, Welcome } from "@/pages";
+import { About, AdminPage, AnalysisHistory, Contact, Dashboard, Features, FileUpload, Forbidden, NotFound, PrivacyPolicy, ResetPassword, Signin, Signup, TermsOfServices, VeriifyEmail, Welcome } from "@/pages";
 import PublicRoute from "./PublicRoute";
 import ProtectedRoute from "./ProtectedRoute";
-import { adminDashboardAnalyticsLoader, analysisHistoryLoader, dashboardLoader } from "./loaders";
+import { adminDashboardAnalyticsLoader, analysisHistoryLoader, dashboardLayoutLoader, dashboardLoader, fileuploadLoader } from "./loaders";
 
 /**
  * Main application router configuration
@@ -31,6 +31,14 @@ const Router = createBrowserRouter(
                     path: PATHS.SIGNUP,
                     element: <PublicRoute restricted><Signup /></PublicRoute>
                 },
+                {
+                    path: PATHS.VERIFY_EMAIL,
+                    element: <VeriifyEmail />
+                },
+                {
+                    path: PATHS.RESET_PASSWORD,
+                    element: <ResetPassword />
+                },
                 { path: PATHS.ABOUT, element: <About /> },
                 { path: PATHS.CONTACT, element: <Contact /> },
                 { path: PATHS.FEATURES, element: <Features /> },
@@ -40,9 +48,10 @@ const Router = createBrowserRouter(
         }, {
             path: PATHS.DASHBOARD,
             element: <ProtectedRoute ><DashboardLayout /></ProtectedRoute>,
+            loader: dashboardLayoutLoader,
             children: [
                 { index: true, element: <Dashboard />, loader: dashboardLoader },
-                { path: PATHS.FILE_UPLOAD, element: <FileUpload /> },
+                { path: PATHS.FILE_UPLOAD, element: <FileUpload />, loader: fileuploadLoader, },
                 { path: PATHS.ANALYSIS_HISTORY, element: <AnalysisHistory />, loader: analysisHistoryLoader },
                 {
                     path: PATHS.ADMIN_PANEL,

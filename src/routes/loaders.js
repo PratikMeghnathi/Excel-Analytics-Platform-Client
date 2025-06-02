@@ -1,4 +1,4 @@
-import { getAdminDashboardAnalytics, getAllAnalyses, getAllUploads } from "@/api";
+import { getAdminDashboardAnalytics, getAiPromptTypes, getAllAnalyses, getAllUploads, getUserAccessStatus } from "@/api";
 
 export const analysisHistoryLoader = async () => {
     return await getAllAnalyses();
@@ -56,3 +56,10 @@ export const dashboardLoader = async () => {
     }
 }
 
+export const fileuploadLoader = async () => {
+    return await getAiPromptTypes();
+}
+
+export const dashboardLayoutLoader = async () => {
+    return await getUserAccessStatus();
+}

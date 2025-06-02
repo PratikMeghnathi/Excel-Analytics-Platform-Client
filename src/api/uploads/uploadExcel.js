@@ -27,7 +27,7 @@ const uploadExcel = async (data) => {
         return { success: true, data: res.data };
     } catch (error) {
         console.log('Error in api/upload/uploadExcel: ', error)
-        const { fieldErrors, genericErrors } = handleApiError(error, ['excelFile']);
+        const { fieldErrors, genericErrors } = handleApiError(error, ['excelFile', 'uploadLimit']);
         return { success: false, fieldErrors, genericErrors };
     }
 }

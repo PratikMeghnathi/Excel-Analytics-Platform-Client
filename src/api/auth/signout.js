@@ -10,11 +10,11 @@ import { handleApiError } from "../apiError";
 
 const signout = async () => {
     try {
-        const { data } = await apiClient.post(API_ENDPOINTS.AUTH.SIGNOUT);
+        const res = await apiClient.post(API_ENDPOINTS.AUTH.SIGNOUT);
         window.dispatchEvent(
             new CustomEvent('auth-event', { detail: { type: 'logout' } })
         );
-        return { success: true, data };
+        return { success: true, data: res.data };
     } catch (error) {
         console.log('Error in api/auth/signout: ', error);
         window.dispatchEvent(

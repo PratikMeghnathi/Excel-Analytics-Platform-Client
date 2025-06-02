@@ -21,18 +21,34 @@ export const API_BASE_URL = 'https://excel-analytics-platform-server.onrender.co
 export const API_ENDPOINTS = {
     AUTH: {
         SIGNUP: '/user/auth/signup',
+        VERIFY_EMAIL: '/user/auth/verify-email',
+        RESEND_VERIFICATION_EMAIL: '/user/auth/resend-verification-email',
+
         SIGNIN: '/user/auth/signin',
         SIGNOUT: '/user/auth/signout',
-        REFRESH: '/user/auth/refresh'
+        REFRESH: '/user/auth/refresh',
+        
+        FORGOT_PASSWORD: '/user/auth/forgot-password',
+        RESET_PASSWORD: '/user/auth/reset-password',
+        VERIFY_RESET_TOKEN: '/user/auth/verify-reset-token',
     },
+
     PROFILE: '/user/profile',
     UPDATE_USER: '/user/update-user',
+    GET_USER_ACCESS_STATUS: '/user/access-status',
+    DELETE_MY_ACCOUNT: '/user/delete-my-account',
+
     UPLOAD_EXCEL: '/upload/excel',
     GET_ALL_UPLOADS: '/upload',
+
     SAVE_ANALYSIS: '/analysis/save',
     GET_ALL_ANALYSES: '/analysis/history',
     GET_ANALYSIS_BY_ID: '/analysis',
     DELETE_ANALYSIS: '/analysis/delete',
+
+    GET_AI_INSIGHTS: '/analysis/ai-insights',
+    GET_AI_PROMPT_TYPES: '/analysis/ai-prompt-types',
+
     GET_ADMIN_DASHBOARD_ANALYTICS: '/admin',
 }
 

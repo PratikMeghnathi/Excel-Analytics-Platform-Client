@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
-
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -25,10 +24,11 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
+        // Handle authentication errors (401) - logout user
         const handleAuthEvent = (event) => {
             const { type, message } = event.detail || {};
 
-            if (type === 'auth-error' || type.includes('TOKEN')) {
+            if (type === 'auth-invalid' || type.includes('TOKEN')) {
                 localStorage.removeItem('user');
                 setUser(null);
             }

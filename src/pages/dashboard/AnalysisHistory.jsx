@@ -1,18 +1,26 @@
+"use client"
+
 import { useCallback, useEffect, useState } from "react"
-import { useLoaderData, useNavigation } from "react-router-dom"
+import { useNavigation } from "react-router-dom"
 import { prepareChartData, showGenericErrorAsToast } from "@/utils"
 import { deleteAnalysis, getAnalysisById } from "@/api"
 import { useTheme } from "@/hooks"
 import { useImmer } from "use-immer"
 import { AnalysisCard, ChartPreviewModal } from "@/components"
-import { Search, Grid, List } from "lucide-react"
+import { Search, Grid, List, Shield } from "lucide-react"
+import { useUserAccessStatusData } from "@/layout"
+import { useLoaderData } from "react-router-dom"
 
 function AnalysisHistory() {
-  // getting initial data to load
-  const response = useLoaderData()
   const navigation = useNavigation()
   const isLoading = navigation.state === "loading"
   const { isDarkMode } = useTheme()
+
+  // Get user permissions and usage limits from dashboard context
+  const { userPermissions, handleAnalysisDeleteSuccess } = useUserAccessStatusData()
+
+  // Get analysis data from the component's own loader
+  const response = useLoaderData()
 
   // State for all analyses
   const [analyses, setAnalyses] = useImmer([])
@@ -95,13 +103,27 @@ function AnalysisHistory() {
         const { dataSetId, sheetIndex } = analysis
         const { success, data, genericErrors } = await getAnalysisById(dataSetId, sheetIndex)
         if (success) {
-          const chartDataResult = prepareChartData(analysis, data.rows, isDarkMode)
-          setChartData(chartDataResult)
+          // Prepare chart visualization data
+          const chartVisualization = prepareChartData(analysis, data.rows, isDarkMode)
+
+          // Combine chart data with table data and AI insights
+          const completeChartData = {
+            ...chartVisualization,
+            // Table data
+            rows: data.rows,
+            headers: analysis.dataSample?.headers || [],
+            totalRows: data.rows?.length || 0,
+            // AI insights data
+            hasAiInsights: data.hasAiInsights || false,
+            aiInsights: data.aiInsights || null,
+          }
+
+          setChartData(completeChartData)
           return
         }
         showGenericErrorAsToast(genericErrors)
       } catch (error) {
-        console.error("Error saving analysis:", error)
+        console.error("Error loading analysis:", error)
         showGenericErrorAsToast(["Failed to load analysis data. Please try again."])
         setShowChartModal(false)
       } finally {
@@ -116,11 +138,19 @@ function AnalysisHistory() {
     async (e, analysisId) => {
       e.stopPropagation()
 
+      // Check permissions before attempting delete
+      if (!userPermissions.canDelete) {
+        showGenericErrorAsToast(["You don't have permission to delete analyses. Please contact your administrator."])
+        return
+      }
+
       setIsAnalysisDeleting(true)
       try {
         const { success, genericErrors } = await deleteAnalysis(analysisId)
         if (success) {
           setAnalyses((draft) => draft.filter((analysis) => analysis._id !== analysisId))
+          // Update usage limits after successful delete
+          handleAnalysisDeleteSuccess()
           return
         }
         showGenericErrorAsToast(genericErrors)
@@ -131,12 +161,12 @@ function AnalysisHistory() {
         setIsAnalysisDeleting(false)
       }
     },
-    [setAnalyses],
+    [setAnalyses, userPermissions.canDelete, handleAnalysisDeleteSuccess],
   )
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
         <h2 className="text-lg sm:text-xl font-semibold text-muted-foreground">Analysis History</h2>
 
         {/* Results count - only show when there are analyses */}
@@ -156,6 +186,26 @@ function AnalysisHistory() {
         )}
       </div>
 
+      {/* User Permission Status */}
+      <div className="mb-4 bg-card rounded-md p-3 border">
+        <div className="flex items-center gap-2 mb-2">
+          <Shield className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium">Account Status</span>
+          <span
+            className={`text-xs px-2 py-1 rounded-full ${
+              userPermissions.permissions === "Read Only"
+                ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+                : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+            }`}
+          >
+            {userPermissions.permissions}
+          </span>
+        </div>
+        <div className="text-xs text-muted-foreground">
+          Role: {userPermissions.role} • Delete: {userPermissions.canDelete ? "Allowed" : "Restricted"}
+        </div>
+      </div>
+
       {/* Search and Filter Controls */}
       {hasAnalyses && (
         <div className="bg-card rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 space-y-3 sm:space-y-0">
@@ -168,7 +218,7 @@ function AnalysisHistory() {
                 placeholder="Search analyses..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background text-sm"
+                className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none bg-background text-sm"
               />
             </div>
 
@@ -178,7 +228,7 @@ function AnalysisHistory() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background text-sm min-w-[120px]"
+                className="px-3 py-2 border rounded-md focus:outline-none bg-background text-sm min-w-[120px]"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -189,16 +239,18 @@ function AnalysisHistory() {
               <div className="hidden sm:flex border rounded-md overflow-hidden">
                 <button
                   onClick={() => setViewMode("grid")}
-                  className={`p-2 transition-colors ${viewMode === "grid" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
-                    }`}
+                  className={`p-2 transition-colors ${
+                    viewMode === "grid" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
+                  }`}
                   title="Grid view"
                 >
                   <Grid className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setViewMode("list")}
-                  className={`p-2 transition-colors ${viewMode === "list" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
-                    }`}
+                  className={`p-2 transition-colors ${
+                    viewMode === "list" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
+                  }`}
                   title="List view"
                 >
                   <List className="w-4 h-4" />
@@ -244,10 +296,11 @@ function AnalysisHistory() {
         <>
           {/* Grid View */}
           <div
-            className={`grid gap-3 sm:gap-4 ${viewMode === "grid"
+            className={`grid gap-3 sm:gap-4 ${
+              viewMode === "grid"
                 ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                 : "grid-cols-1 max-w-4xl mx-auto"
-              }`}
+            }`}
           >
             {filteredAnalyses.map((analysis) => (
               <AnalysisCard
@@ -256,6 +309,7 @@ function AnalysisHistory() {
                 onClick={handleAnalysisClick}
                 onRemove={handleRemoveAnalysis}
                 compact={viewMode === "list"}
+                canDelete={userPermissions.canDelete}
               />
             ))}
           </div>

@@ -1,3 +1,5 @@
+"use client"
+
 import { getAnalysisById } from "@/api"
 import { AnalysisCard, ChartPreviewModal } from "@/components"
 import { useTheme } from "@/hooks"
@@ -45,8 +47,22 @@ function Dashboard() {
                 const { dataSetId, sheetIndex } = analysis
                 const { success, data, genericErrors } = await getAnalysisById(dataSetId, sheetIndex)
                 if (success) {
-                    const chartDataResult = prepareChartData(analysis, data.rows, isDarkMode)
-                    setChartData(chartDataResult)
+                    // Prepare chart visualization data
+                    const chartVisualization = prepareChartData(analysis, data.rows, isDarkMode)
+
+                    // Combine chart data with table data and AI insights
+                    const completeChartData = {
+                        ...chartVisualization,
+                        // Table data
+                        rows: data.rows,
+                        headers: analysis.dataSample?.headers || [],
+                        totalRows: data.rows?.length || 0,
+                        // AI insights data
+                        hasAiInsights: data.hasAiInsights || false,
+                        aiInsights: data.aiInsights || null,
+                    }
+
+                    setChartData(completeChartData)
                     return
                 }
                 showGenericErrorAsToast(genericErrors)
@@ -74,25 +90,25 @@ function Dashboard() {
 
             {/* Quick Stats Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                <div className="p-4 sm:p-6 bg-card rounded-md shadow-md flex flex-col items-center justify-center">
-                    <span className="text-2xl sm:text-3xl">
+                <div className="p-4 sm:p-6 bg-card border border-border rounded-md shadow-sm flex flex-col items-center justify-center">
+                    <span className="text-2xl sm:text-3xl text-primary">
                         <Upload />
                     </span>
-                    <h3 className="text-base sm:text-lg font-semibold mt-2">Total Uploads</h3>
-                    <p className="text-xl sm:text-2xl font-bold">{isLoading ? "..." : stats.totalUploads}</p>
+                    <h3 className="text-base sm:text-lg font-semibold mt-2 text-card-foreground">Total Uploads</h3>
+                    <p className="text-xl sm:text-2xl font-bold text-primary">{isLoading ? "..." : stats.totalUploads}</p>
                 </div>
-                <div className="p-4 sm:p-6 bg-card rounded-md shadow-md flex flex-col items-center justify-center">
-                    <span className="text-2xl sm:text-3xl">
+                <div className="p-4 sm:p-6 bg-card border border-border rounded-md shadow-sm flex flex-col items-center justify-center">
+                    <span className="text-2xl sm:text-3xl text-primary">
                         <ChartArea />
                     </span>
-                    <h3 className="text-base sm:text-lg font-semibold mt-2">Saved Analyses</h3>
-                    <p className="text-xl sm:text-2xl font-bold">{isLoading ? "..." : stats.savedAnalyses}</p>
+                    <h3 className="text-base sm:text-lg font-semibold mt-2 text-card-foreground">Saved Analyses</h3>
+                    <p className="text-xl sm:text-2xl font-bold text-primary">{isLoading ? "..." : stats.savedAnalyses}</p>
                 </div>
             </div>
 
             {/* Recent Analyses Section */}
-            <div className="bg-card rounded-md shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
-                <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Recent Analyses</h2>
+            <div className="bg-card border border-border rounded-md shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
+                <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-card-foreground">Recent Analyses</h2>
                 {isLoading ? (
                     <div className="flex justify-center items-center p-4">
                         <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-primary"></div>
@@ -110,14 +126,20 @@ function Dashboard() {
                             }}
                         >
                             {recentAnalyses.map((analysis) => (
-                                <AnalysisCard key={analysis._id} analysis={analysis} onClick={handleAnalysisClick} compact={true} />
+                                <AnalysisCard
+                                    key={analysis._id}
+                                    analysis={analysis}
+                                    onClick={handleAnalysisClick}
+                                    compact={true}
+                                    canDelete={false} // Don't show delete button on dashboard
+                                />
                             ))}
 
                             {/* Navigate Button Card */}
                             <div className="flex flex-col gap-0.5 items-center justify-center rounded-md min-w-[250px] sm:min-w-[300px] text-muted-foreground">
                                 <Link
                                     to={PATHS.ANALYSIS_HISTORY}
-                                    className="text-sm p-2 bg-muted rounded-full hover:bg-muted-foreground/30 transition"
+                                    className="text-sm p-2 bg-muted border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors"
                                 >
                                     <ArrowRight />
                                 </Link>
@@ -129,8 +151,8 @@ function Dashboard() {
             </div>
 
             {/* Recent Uploads Section */}
-            <div className="bg-card rounded-md shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
-                <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Recent Uploads</h2>
+            <div className="bg-card border border-border rounded-md shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
+                <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-card-foreground">Recent Uploads</h2>
                 {isLoading ? (
                     <div className="flex justify-center items-center p-4">
                         <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-primary"></div>
@@ -143,7 +165,7 @@ function Dashboard() {
                         <div className="hidden sm:block">
                             <ul className="space-y-2">
                                 {/* Header Row */}
-                                <li className="flex justify-between items-center font-semibold border-b py-2">
+                                <li className="flex justify-between items-center font-semibold border-b border-border py-2 text-card-foreground">
                                     <span className="w-[5%]">#</span>
                                     <span className="w-[45%]">Filename</span>
                                     <span className="w-[20%] text-right">Size</span>
@@ -152,9 +174,12 @@ function Dashboard() {
 
                                 {/* Data Rows */}
                                 {uploads.map((upload, index) => (
-                                    <li key={upload._id} className="flex justify-between items-center py-2 border-b text-sm">
-                                        <span className="w-[5%]">{index + 1}</span>
-                                        <span className="w-[45%] font-medium truncate">{upload.originalName}</span>
+                                    <li
+                                        key={upload._id}
+                                        className="flex justify-between items-center py-2 border-b border-border text-sm hover:bg-muted/50 transition-colors"
+                                    >
+                                        <span className="w-[5%] text-muted-foreground">{index + 1}</span>
+                                        <span className="w-[45%] font-medium truncate text-card-foreground">{upload.originalName}</span>
                                         <span className="w-[20%] text-muted-foreground text-right">{upload.fileSize}</span>
                                         <span className="w-[30%] text-muted-foreground text-right">{formatDate(upload.createdAt)}</span>
                                     </li>
@@ -165,12 +190,14 @@ function Dashboard() {
                         {/* Mobile Card View - Shown only on small screens */}
                         <div className="sm:hidden space-y-3">
                             {uploads.map((upload, index) => (
-                                <div key={upload._id} className="border rounded-md p-3">
+                                <div key={upload._id} className="border border-border rounded-md p-3 bg-card">
                                     <div className="flex justify-between items-center mb-1">
-                                        <span className="text-xs bg-muted px-2 py-0.5 rounded-full">#{index + 1}</span>
+                                        <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+                                            #{index + 1}
+                                        </span>
                                         <span className="text-xs text-muted-foreground">{upload.fileSize}</span>
                                     </div>
-                                    <div className="font-medium truncate mb-1">{upload.originalName}</div>
+                                    <div className="font-medium truncate mb-1 text-card-foreground">{upload.originalName}</div>
                                     <div className="text-xs text-muted-foreground">{formatDate(upload.createdAt)}</div>
                                 </div>
                             ))}
