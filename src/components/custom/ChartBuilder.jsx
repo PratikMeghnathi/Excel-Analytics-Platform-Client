@@ -1726,7 +1726,7 @@ function ChartBuilder({
             <div className="px-4 sm:px-6 pb-4 sm:pb-6 border-t border-border">
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-end mb-4 mt-4">
                 {/* Analysis Type Dropdown - Similar to Download Format */}
-                <div className="flex-1">
+                <div className="w-full sm:flex-1">
                   <label className="block text-sm font-medium mb-2 text-card-foreground">Analysis Type</label>
                   <div className="relative" ref={promptMenuRef}>
                     <div className="flex">
@@ -1909,7 +1909,7 @@ function ChartBuilder({
                   draft.isDownloadMenuOpen = !isDownloadMenuOpen
                 })
               }
-              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-muted text-muted-foreground border border-r-0 border-border text-sm rounded-l-md hover:bg-muted/80 transition-colors"
+              className="flex items-center justify-between sm:justify-start gap-2 px-3 sm:px-4 py-2 bg-muted text-muted-foreground border sm:border-r-0 border-border text-sm rounded-l-md sm:rounded-r-none hover:bg-muted/80 transition-colors w-full sm:w-auto"
             >
               <Download className="w-4 h-4" />
               <span className="hidden sm:inline">Format: {downloadFormat.toUpperCase()}</span>

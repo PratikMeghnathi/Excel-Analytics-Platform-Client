@@ -8,8 +8,8 @@
  * @constant {string}
  * @default 'http://localhost:8080/api'
  */
-// export const API_BASE_URL = 'http://localhost:5000/api'
-export const API_BASE_URL = 'https://excel-analytics-platform-server.onrender.com/api'
+
+export const API_BASE_URL = import.meta.env.NODE_ENV === "production" ? import.meta.env.VITE_API_BASE_URL : import.meta.env.VITE_LOCAL_API_BASE_URL
 
 /**
  * Collection of API endpoints organized by feature
@@ -27,7 +27,7 @@ export const API_ENDPOINTS = {
         SIGNIN: '/user/auth/signin',
         SIGNOUT: '/user/auth/signout',
         REFRESH: '/user/auth/refresh',
-        
+
         FORGOT_PASSWORD: '/user/auth/forgot-password',
         RESET_PASSWORD: '/user/auth/reset-password',
         VERIFY_RESET_TOKEN: '/user/auth/verify-reset-token',

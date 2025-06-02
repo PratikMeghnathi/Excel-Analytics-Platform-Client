@@ -1,14 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ChevronLeft, ChevronRight, Database } from "lucide-react"
+import { ChevronLeft, ChevronRight, Database, ChevronDown, ChevronUp } from "lucide-react"
 
 function DataTable({ data, headers, totalRows, columnTypes }) {
   const [page, setPage] = useState(0)
+  const [expandedRows, setExpandedRows] = useState(new Set())
   const rowsPerPage = 5
 
   useEffect(() => {
     setPage(0)
+    setExpandedRows(new Set()) // Reset expanded rows when data changes
   }, [data])
 
   const startRow = page * rowsPerPage
@@ -23,6 +25,18 @@ function DataTable({ data, headers, totalRows, columnTypes }) {
   const handleNextPage = () => {
     setPage((prev) => Math.min(totalPages - 1, prev + 1))
   }
+
+  const toggleRowExpansion = (rowIndex) => {
+    const newExpandedRows = new Set(expandedRows)
+    if (newExpandedRows.has(rowIndex)) {
+      newExpandedRows.delete(rowIndex)
+    } else {
+      newExpandedRows.add(rowIndex)
+    }
+    setExpandedRows(newExpandedRows)
+  }
+
+  const isRowExpanded = (rowIndex) => expandedRows.has(rowIndex)
 
   return (
     <div className="bg-card border rounded-lg overflow-hidden">
@@ -99,42 +113,66 @@ function DataTable({ data, headers, totalRows, columnTypes }) {
           <div className="p-6 text-center text-sm text-muted-foreground">No data available</div>
         ) : (
           <div className="divide-y divide-border">
-            {displayData.map((row, rowIndex) => (
-              <div key={rowIndex} className="p-4 space-y-2">
-                <div className="text-xs font-medium text-muted-foreground mb-2">Row {startRow + rowIndex + 1}</div>
-                {headers.slice(0, 4).map((header, index) => {
-                  const columnType = columnTypes.find((c) => c.name === header)?.type
-                  let cellValue = row[index]
+            {displayData.map((row, rowIndex) => {
+              const actualRowIndex = startRow + rowIndex
+              const expanded = isRowExpanded(actualRowIndex)
+              const visibleHeaders = expanded ? headers : headers.slice(0, 4)
+              const hiddenColumnsCount = headers.length - 4
 
-                  if (columnType === "date" && typeof cellValue === "string") {
-                    const date = new Date(cellValue)
-                    if (!Number.isNaN(date.getTime())) {
-                      cellValue = date.toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })
+              return (
+                <div key={rowIndex} className="p-4 space-y-2">
+                  <div className="text-xs font-medium text-muted-foreground mb-2">Row {actualRowIndex + 1}</div>
+
+                  {/* Display visible columns */}
+                  {visibleHeaders.map((header, index) => {
+                    const columnType = columnTypes.find((c) => c.name === header)?.type
+                    let cellValue = row[index]
+
+                    if (columnType === "date" && typeof cellValue === "string") {
+                      const date = new Date(cellValue)
+                      if (!Number.isNaN(date.getTime())) {
+                        cellValue = date.toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })
+                      }
                     }
-                  }
 
-                  return (
-                    <div key={`${rowIndex}-${header}`} className="flex justify-between items-start gap-2">
-                      <span className="text-xs font-medium text-muted-foreground truncate flex-shrink-0 min-w-0 max-w-[40%]">
-                        {header}:
-                      </span>
-                      <span className="text-sm text-foreground text-right truncate min-w-0 max-w-[60%]">
-                        {cellValue?.toString() || "—"}
-                      </span>
-                    </div>
-                  )
-                })}
-                {headers.length > 4 && (
-                  <div className="text-xs text-muted-foreground text-center pt-1">
-                    +{headers.length - 4} more columns
-                  </div>
-                )}
-              </div>
-            ))}
+                    return (
+                      <div key={`${rowIndex}-${header}`} className="flex justify-between items-start gap-2">
+                        <span className="text-xs font-medium text-muted-foreground truncate flex-shrink-0 min-w-0 max-w-[40%]">
+                          {header}:
+                        </span>
+                        <span className="text-sm text-foreground text-right truncate min-w-0 max-w-[60%]">
+                          {cellValue?.toString() || "—"}
+                        </span>
+                      </div>
+                    )
+                  })}
+
+                  {/* Expand/Collapse button for additional columns */}
+                  {headers.length > 4 && (
+                    <button
+                      onClick={() => toggleRowExpansion(actualRowIndex)}
+                      className="flex items-center justify-center gap-1 w-full text-xs text-primary hover:text-primary/80 transition-colors pt-2 border-t border-border/50 mt-3"
+                    >
+                      {expanded ? (
+                        <>
+                          <ChevronUp className="w-3 h-3" />
+                          <span>Show less</span>
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="w-3 h-3" />
+                          <span>+{hiddenColumnsCount} more columns</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+              )
+            })}
           </div>
         )}
       </div>
