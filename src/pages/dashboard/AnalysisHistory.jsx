@@ -6,7 +6,7 @@ import { prepareChartData, showGenericErrorAsToast } from "@/utils"
 import { deleteAnalysis, getAnalysisById } from "@/api"
 import { useTheme } from "@/hooks"
 import { useImmer } from "use-immer"
-import { AnalysisCard, ChartPreviewModal } from "@/components"
+import { AnalysisCard, ChartPreviewModal, Spinner1 } from "@/components"
 import { Search, Grid, List, Shield } from "lucide-react"
 import { useUserAccessStatusData } from "@/layout"
 import { useLoaderData } from "react-router-dom"
@@ -164,6 +164,14 @@ function AnalysisHistory() {
     [setAnalyses, userPermissions.canDelete, handleAnalysisDeleteSuccess],
   )
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner1 className="w-8 h-8 border-3 border-loading-spinner-color" />
+      </div>
+    )
+  }
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
@@ -192,11 +200,10 @@ function AnalysisHistory() {
           <Shield className="w-4 h-4 text-primary" />
           <span className="text-sm font-medium">Account Status</span>
           <span
-            className={`text-xs px-2 py-1 rounded-full ${
-              userPermissions.permissions === "Read Only"
+            className={`text-xs px-2 py-1 rounded-full ${userPermissions.permissions === "Read Only"
                 ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
                 : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-            }`}
+              }`}
           >
             {userPermissions.permissions}
           </span>
@@ -239,18 +246,16 @@ function AnalysisHistory() {
               <div className="hidden sm:flex border rounded-md overflow-hidden">
                 <button
                   onClick={() => setViewMode("grid")}
-                  className={`p-2 transition-colors ${
-                    viewMode === "grid" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
-                  }`}
+                  className={`p-2 transition-colors ${viewMode === "grid" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
+                    }`}
                   title="Grid view"
                 >
                   <Grid className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setViewMode("list")}
-                  className={`p-2 transition-colors ${
-                    viewMode === "list" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
-                  }`}
+                  className={`p-2 transition-colors ${viewMode === "list" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
+                    }`}
                   title="List view"
                 >
                   <List className="w-4 h-4" />
@@ -296,11 +301,10 @@ function AnalysisHistory() {
         <>
           {/* Grid View */}
           <div
-            className={`grid gap-3 sm:gap-4 ${
-              viewMode === "grid"
+            className={`grid gap-3 sm:gap-4 ${viewMode === "grid"
                 ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                 : "grid-cols-1 max-w-4xl mx-auto"
-            }`}
+              }`}
           >
             {filteredAnalyses.map((analysis) => (
               <AnalysisCard

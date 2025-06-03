@@ -1,12 +1,13 @@
 "use client"
 
 import { getAnalysisById } from "@/api"
-import { AnalysisCard, ChartPreviewModal } from "@/components"
+import { AnalysisCard, ChartPreviewModal, Spinner1 } from "@/components"
 import { useTheme } from "@/hooks"
 import { formatDate, PATHS, prepareChartData, showGenericErrorAsToast, Upload } from "@/utils"
-import { ArrowRight, AreaChartIcon as ChartArea } from "lucide-react"
+import { ArrowRight, AreaChartIcon as ChartArea, Loader2 } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
 import { Link, useLoaderData, useNavigation } from "react-router-dom"
+import { LoadingPage } from ".."
 
 function Dashboard() {
     const { isDarkMode } = useTheme()
@@ -83,6 +84,15 @@ function Dashboard() {
         setSelectedAnalysis(null)
         setChartData(null)
     }, [])
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <Spinner1 className="w-8 h-8 border-3 border-loading-spinner-color" />
+            </div>
+        )
+    }
+
 
     return (
         <div>

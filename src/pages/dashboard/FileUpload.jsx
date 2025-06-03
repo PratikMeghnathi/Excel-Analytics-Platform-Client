@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { uploadExcel } from "@/api"
-import { ChartBuilder, DataTable } from "@/components"
+import { ChartBuilder, DataTable, Spinner1 } from "@/components"
 import { handleExcelFile, showGenericErrorAsToast } from "@/utils"
 import { useImmer } from "use-immer"
 import { useTheme } from "@/hooks"
 import { Upload, FileSpreadsheet, AlertCircle, Info, BarChart3, Infinity, Shield } from "lucide-react"
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData, useNavigation } from "react-router-dom"
 import { useUserAccessStatusData } from "@/layout"
 
 function FileUpload() {
@@ -13,6 +13,10 @@ function FileUpload() {
 
   // Get AI_PROMPTS types from loader
   const response = useLoaderData()
+  const navigation = useNavigation()
+
+  // Check if page is currently loading (during navigation)
+  const isInitDataLoading = navigation.state === "loading"
 
   useEffect(() => {
     if (!response.success && response.genericErrors) {
@@ -219,6 +223,15 @@ function FileUpload() {
 
   const hasData = data && data.headers && data.headers.length > 0
 
+
+  if (isInitDataLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner1 className="w-8 h-8 border-3 border-loading-spinner-color" />
+      </div>
+    )
+  }
+
   return (
     <div>
       <h2 className="text-lg sm:text-xl font-semibold text-muted-foreground mb-3 sm:mb-4">Upload & Analyze Data</h2>
@@ -230,8 +243,8 @@ function FileUpload() {
           <span className="text-sm font-medium">Account Status</span>
           <span
             className={`text-xs px-2 py-1 rounded-full ${userPermissions.permissions === "Read Only"
-                ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
-                : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+              ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+              : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
               }`}
           >
             {userPermissions.permissions}
@@ -267,12 +280,12 @@ function FileUpload() {
             </div>
             <span
               className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 transition-colors duration-300 ${usageLimits.uploads.unlimited
-                  ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                  : isUploadLimitReached()
-                    ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                    : isNearUploadLimit()
-                      ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
-                      : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                : isUploadLimitReached()
+                  ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                  : isNearUploadLimit()
+                    ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+                    : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
                 }`}
             >
               {usageLimits.uploads.unlimited && <Infinity className="w-3 h-3" />}
@@ -312,12 +325,12 @@ function FileUpload() {
             </div>
             <span
               className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 transition-colors duration-300 ${usageLimits.analyses.unlimited
-                  ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                  : isAnalysisLimitReached()
-                    ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                    : isNearAnalysisLimit()
-                      ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
-                      : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                : isAnalysisLimitReached()
+                  ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                  : isNearAnalysisLimit()
+                    ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+                    : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
                 }`}
             >
               {usageLimits.analyses.unlimited && <Infinity className="w-3 h-3" />}

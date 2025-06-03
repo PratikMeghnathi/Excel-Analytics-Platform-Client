@@ -6,6 +6,7 @@ import { useImmer } from "use-immer"
 import { ERROR_TOAST_OPTIONS, showGenericErrorAsToast, SUCCESS_TOAST_OPTIONS, TOAST_OPTIONS } from "@/utils"
 import toast from "react-hot-toast"
 import { updateUser } from "@/api"
+import { Spinner1 } from "@/components"
 
 const UserEditModal = ({ user, isOpen, onClose, onSave, isUserUpdating }) => {
   const [editUser, updateEditUser] = useImmer({
@@ -537,8 +538,8 @@ const AdminPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading admin data...</div>
+      <div className="flex items-center justify-center h-full">
+        <Spinner1 className="w-8 h-8 border-3 border-loading-spinner-color" />
       </div>
     )
   }
