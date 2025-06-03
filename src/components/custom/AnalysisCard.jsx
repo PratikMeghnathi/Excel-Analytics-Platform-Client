@@ -1,15 +1,25 @@
 "use client"
 
-import { Trash, BarChart2, PieChart, ScatterChart, LineChart, Box, Brain } from "lucide-react"
+import { useState } from "react"
+import { Trash, BarChart2, PieChart, ScatterChart, LineChart, Box, Brain, ChevronDown, ChevronUp } from "lucide-react"
 import { formatDate } from "@/utils"
 
 function AnalysisCard({ analysis, onClick, onRemove, compact = false, canDelete = true }) {
   const { name, filename, sheetName, chartConfig, createdAt, dataSample, _id, hasAiInsights } = analysis
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const handleRemove = (e) => {
     e.stopPropagation()
     if (onRemove) onRemove(e, _id)
   }
+
+  const toggleExpansion = (e) => {
+    e.stopPropagation() // Prevent card click when expanding
+    setIsExpanded(!isExpanded)
+  }
+
+  const visibleColumns = isExpanded ? dataSample?.headers || [] : (dataSample?.headers || []).slice(0, 3)
+  const hiddenColumnsCount = (dataSample?.headers?.length || 0) - 3
 
   return (
     <div
@@ -49,48 +59,87 @@ function AnalysisCard({ analysis, onClick, onRemove, compact = false, canDelete 
       {/* Data preview or chart preview */}
       {!compact && dataSample?.headers?.length > 0 && dataSample?.rows?.length > 0 ? (
         <div className="flex-grow my-1">
-          {/* Mobile: Show simplified data preview */}
+          {/* Mobile: Show simplified data preview with expansion */}
           <div className="sm:hidden">
             <div className="bg-muted/30 rounded border p-2 text-xs">
               <div className="font-medium mb-1">Data Preview:</div>
               <div className="space-y-1">
-                {dataSample.headers.slice(0, 3).map((header, i) => (
+                {visibleColumns.map((header, i) => (
                   <div key={i} className="flex justify-between">
                     <span className="text-muted-foreground truncate">{header}:</span>
                     <span className="truncate ml-2">{dataSample.rows[0]?.[i] || "N/A"}</span>
                   </div>
                 ))}
+
+                {/* Expand/Collapse button for mobile */}
                 {dataSample.headers.length > 3 && (
-                  <div className="text-muted-foreground text-center">+{dataSample.headers.length - 3} more columns</div>
+                  <button
+                    onClick={toggleExpansion}
+                    className="flex items-center justify-center gap-1 w-full text-xs text-primary hover:text-primary/80 transition-colors pt-2 border-t border-border/50 mt-2"
+                  >
+                    {isExpanded ? (
+                      <>
+                        <ChevronUp className="w-3 h-3" />
+                        <span>Show less</span>
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="w-3 h-3" />
+                        <span>+{hiddenColumnsCount} more columns</span>
+                      </>
+                    )}
+                  </button>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Desktop: Show full table */}
-          <div className="hidden sm:block overflow-x-auto rounded border border-border mb-1.5">
-            <table className="min-w-[400px] lg:min-w-[500px] w-full text-xs sm:text-sm border-collapse">
-              <thead className="bg-muted">
-                <tr>
-                  {dataSample.headers.map((header, i) => (
-                    <th key={i} className="border border-border p-1.5 sm:p-2 text-left font-medium truncate">
-                      {header}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {dataSample.rows.slice(0, 3).map((row, rowIndex) => (
-                  <tr key={rowIndex} className="hover:bg-muted/50">
-                    {row.map((cell, cellIndex) => (
-                      <td key={cellIndex} className="border border-border p-1.5 sm:p-2 truncate max-w-[100px]">
-                        {cell}
-                      </td>
+          {/* Desktop: Show full table with expansion */}
+          <div className="hidden sm:block">
+            <div className="overflow-x-auto rounded border border-border mb-1.5">
+              <table className="min-w-[400px] lg:min-w-[500px] w-full text-xs sm:text-sm border-collapse">
+                <thead className="bg-muted">
+                  <tr>
+                    {visibleColumns.map((header, i) => (
+                      <th key={i} className="border border-border p-1.5 sm:p-2 text-left font-medium truncate">
+                        {header}
+                      </th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {dataSample.rows.slice(0, 3).map((row, rowIndex) => (
+                    <tr key={rowIndex} className="hover:bg-muted/50">
+                      {visibleColumns.map((_, cellIndex) => (
+                        <td key={cellIndex} className="border border-border p-1.5 sm:p-2 truncate max-w-[100px]">
+                          {row[cellIndex] || "N/A"}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Expand/Collapse button for desktop */}
+            {dataSample.headers.length > 3 && (
+              <button
+                onClick={toggleExpansion}
+                className="flex items-center justify-center gap-1 w-full text-xs text-primary hover:text-primary/80 transition-colors py-1 border border-border/50 rounded-md bg-muted/20 hover:bg-muted/40"
+              >
+                {isExpanded ? (
+                  <>
+                    <ChevronUp className="w-3 h-3" />
+                    <span>Show less columns</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="w-3 h-3" />
+                    <span>Show +{hiddenColumnsCount} more columns</span>
+                  </>
+                )}
+              </button>
+            )}
           </div>
         </div>
       ) : compact ? (

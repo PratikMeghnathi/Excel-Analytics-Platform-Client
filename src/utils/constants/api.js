@@ -10,7 +10,7 @@
  */
 
 export const API_BASE_URL = import.meta.env.VITE_ENV === "production" ? import.meta.env.VITE_API_BASE_URL : import.meta.env.VITE_LOCAL_API_BASE_URL
-console.log({ env: import.meta.env.VITE_ENV, cloud: import.meta.env.VITE_API_BASE_URL, local: import.meta.env.VITE_LOCAL_API_BASE_URL })
+console.log({ api_base_url: API_BASE_URL, env: import.meta.env.VITE_ENV, cloud: import.meta.env.VITE_API_BASE_URL, local: import.meta.env.VITE_LOCAL_API_BASE_URL })
 
 /**
  * Collection of API endpoints organized by feature
