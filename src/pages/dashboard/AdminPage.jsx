@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
-import { BarChart3, Upload, Users, Edit, ChevronDown, ChevronUp, Clock, Activity, FileBarChart } from "lucide-react"
+import { useImmer } from "use-immer"
 import { useTheme } from "@/hooks"
 import { useLoaderData, useNavigation } from "react-router-dom"
-import { useImmer } from "use-immer"
-import { ERROR_TOAST_OPTIONS, showGenericErrorAsToast, SUCCESS_TOAST_OPTIONS, TOAST_OPTIONS } from "@/utils"
+import {
+  ERROR_TOAST_OPTIONS, showGenericErrorAsToast, SUCCESS_TOAST_OPTIONS,
+  BarChart3, Upload, Users, Edit, ChevronDown, ChevronUp, Clock, Activity, FileBarChart
+} from "@/utils"
 import toast from "react-hot-toast"
 import { updateUser } from "@/api"
 import { Spinner1 } from "@/components"

@@ -1,8 +1,8 @@
-"use client"
-
 import { useState } from "react"
-import { Trash, BarChart2, PieChart, ScatterChart, LineChart, Box, Brain, ChevronDown, ChevronUp } from "lucide-react"
-import { formatDate } from "@/utils"
+import {
+  formatDate,
+  Trash, BarChart2, PieChart, ScatterChart, LineChart, Box, Brain, ChevronDown, ChevronUp
+} from "@/utils"
 
 function AnalysisCard({ analysis, onClick, onRemove, compact = false, canDelete = true }) {
   const { name, filename, sheetName, chartConfig, createdAt, dataSample, _id, hasAiInsights } = analysis

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useReducer } from "react"
-import { ChevronRight, ChevronDown } from "lucide-react"
+import { ChevronRight, ChevronDown } from "@/utils"
 
 const COLOR_SCHEMES = {
     DEFAULT: "default",

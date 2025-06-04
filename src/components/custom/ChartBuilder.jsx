@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useRef, useCallback, useState } from "react"
 import { useImmer } from "use-immer"
 
-import { downloadFile, ERROR_TOAST_OPTIONS, getCssVarAsHex, showGenericErrorAsToast, SUCCESS_TOAST_OPTIONS, suggestChartType, TOAST_OPTIONS } from "@/utils"
+import {
+  downloadFile, ERROR_TOAST_OPTIONS, getCssVarAsHex, showGenericErrorAsToast, SUCCESS_TOAST_OPTIONS, suggestChartType, TOAST_OPTIONS,
+  BarChart3, Download, Save, AlertTriangle, ChevronDown, Info, Shield, Sparkles, Copy, Check, Brain,
+} from "@/utils"
 import { AxisSelector, ChartOptions, ErrorBoundary, Spinner1 } from "."
 import { getAiInsights, saveAnalysis } from "@/api"
 
@@ -14,20 +17,6 @@ import * as THREE from "three"
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js"
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js"
-
-import {
-  BarChart3,
-  Download,
-  Save,
-  AlertTriangle,
-  ChevronDown,
-  Info,
-  Shield,
-  Sparkles,
-  Copy,
-  Check,
-  Brain,
-} from "lucide-react"
 
 // Chart type options
 const CHART_OPTIONS = [
@@ -96,7 +85,7 @@ function ChartBuilder({
     role: "user",
     permissions: "Full Access",
   },
-  aiPromptTypes = [], // New prop for AI prompt types
+  aiPromptTypes = [],
 }) {
   const [chartState, setChartState] = useImmer({
     selectedSheet: sheetNames[0] || "",
@@ -835,7 +824,7 @@ function ChartBuilder({
 
           let geometry
           try {
-            // Try simpler approach first - create a basic BufferGeometry
+            // create a basic BufferGeometry
             geometry = new THREE.BufferGeometry().setFromPoints(validPoints)
 
             // Compute a bounding box
@@ -878,7 +867,7 @@ function ChartBuilder({
             }
           } catch (e) {
             console.error("Error creating mesh geometry:", e)
-            // Last resort - create a basic shape
+            // create a basic shape
             geometry = new THREE.SphereGeometry(3, 32, 16)
           }
 

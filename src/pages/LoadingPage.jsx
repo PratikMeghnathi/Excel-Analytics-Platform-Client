@@ -1,6 +1,4 @@
-"use client"
-
-import { BarChart3, Loader2, Database, FileSpreadsheet, Brain } from "lucide-react"
+import { BarChart3, Loader2, Database, FileSpreadsheet, Brain } from "@/utils"
 
 function LoadingPage({
   message = "Loading...",

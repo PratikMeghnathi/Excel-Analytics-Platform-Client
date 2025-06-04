@@ -1,13 +1,13 @@
-"use client"
-
 import { signup } from "@/api"
 import { Spinner1 } from "@/components"
-import { ERROR_TOAST_OPTIONS, Eye, PATHS, SUCCESS_TOAST_OPTIONS, TOAST_OPTIONS } from "@/utils"
+import {
+  ERROR_TOAST_OPTIONS, Eye, PATHS, SUCCESS_TOAST_OPTIONS,
+  BarChart3, CheckCircle, AlertCircle, User, Mail, Lock, EyeOff, Send
+} from "@/utils"
 import { useState } from "react"
 import toast from "react-hot-toast"
 import { Link, useNavigate } from "react-router-dom"
 import { useImmer } from "use-immer"
-import { BarChart3, CheckCircle, AlertCircle, User, Mail, Lock, EyeOff, Send } from "lucide-react"
 
 function Signup() {
   const navigate = useNavigate()
@@ -108,7 +108,6 @@ function Signup() {
 
           // Handle input field errors (could be for any field)
           if (fieldErrors.input) {
-            // You can decide where to show this - I'm putting it with email as a general error
             draft.emailExists = fieldErrors.input
           }
         })
@@ -306,13 +305,12 @@ function Signup() {
                 <div className="flex items-center gap-2 mt-2">
                   <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                     <div
-                      className={`h-full transition-all duration-300 ${
-                        passwordStrength.strength === "Weak"
+                      className={`h-full transition-all duration-300 ${passwordStrength.strength === "Weak"
                           ? "w-1/3 bg-destructive"
                           : passwordStrength.strength === "Moderate"
                             ? "w-2/3 bg-amber-500"
                             : "w-full bg-green-500"
-                      }`}
+                        }`}
                     />
                   </div>
                   <span className={`text-xs font-medium ${passwordStrength.color}`}>{passwordStrength.strength}</span>

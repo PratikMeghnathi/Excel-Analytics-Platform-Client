@@ -18,7 +18,7 @@ export const TOAST_OPTIONS = {
     },
 }
 
-// Enhanced options for different toast types (optional - you can use these if needed)
+// Enhanced options for different toast types
 export const SUCCESS_TOAST_OPTIONS = {
     ...TOAST_OPTIONS,
     style: {

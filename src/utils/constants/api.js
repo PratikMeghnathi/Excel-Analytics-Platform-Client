@@ -101,7 +101,7 @@ export const API_ERROR_CODES = {
     TOKEN_TAMPERED: 'TOKEN_TAMPERED',
     TOKEN_MISSING: 'TOKEN_MISSING',
 
-    //other server errors
+    // Other server errors
     WRONG_TYPE: 'WRONG_TYPE',
 
     // Generic fallbacks

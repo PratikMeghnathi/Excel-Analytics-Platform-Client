@@ -118,24 +118,3 @@ export const handleApiError = (error, fieldsToHandle = []) => {
     }
     return { fieldErrors, genericErrors };
 }
-
-// const error = createApiError({
-//     response: {
-//         data: {
-//             code: 123,
-//             errors: {
-//                 email: {
-//                     message: 'email errors.',
-//                 },
-//                 password: {
-//                     message: 'password error.',
-//                 },
-//                 serverError: {
-//                     message: 'internal server error.'
-//                 }
-//             }
-//         } && null,
-//         status: 500
-//     }
-// });
-// console.log(handleApiError(error, ['email', 'password']))

@@ -1,13 +1,13 @@
-"use client"
-
 import { useCallback, useEffect, useState } from "react"
 import { useNavigation } from "react-router-dom"
-import { prepareChartData, showGenericErrorAsToast } from "@/utils"
+import {
+  prepareChartData, showGenericErrorAsToast,
+  Search, Grid, List, Shield
+} from "@/utils"
 import { deleteAnalysis, getAnalysisById } from "@/api"
 import { useTheme } from "@/hooks"
 import { useImmer } from "use-immer"
 import { AnalysisCard, ChartPreviewModal, Spinner1 } from "@/components"
-import { Search, Grid, List, Shield } from "lucide-react"
 import { useUserAccessStatusData } from "@/layout"
 import { useLoaderData } from "react-router-dom"
 
@@ -201,8 +201,8 @@ function AnalysisHistory() {
           <span className="text-sm font-medium">Account Status</span>
           <span
             className={`text-xs px-2 py-1 rounded-full ${userPermissions.permissions === "Read Only"
-                ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
-                : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+              ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+              : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
               }`}
           >
             {userPermissions.permissions}
@@ -302,8 +302,8 @@ function AnalysisHistory() {
           {/* Grid View */}
           <div
             className={`grid gap-3 sm:gap-4 ${viewMode === "grid"
-                ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                : "grid-cols-1 max-w-4xl mx-auto"
+              ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              : "grid-cols-1 max-w-4xl mx-auto"
               }`}
           >
             {filteredAnalyses.map((analysis) => (

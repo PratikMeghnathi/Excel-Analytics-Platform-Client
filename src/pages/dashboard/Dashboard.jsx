@@ -4,10 +4,9 @@ import { getAnalysisById } from "@/api"
 import { AnalysisCard, ChartPreviewModal, Spinner1 } from "@/components"
 import { useTheme } from "@/hooks"
 import { formatDate, PATHS, prepareChartData, showGenericErrorAsToast, Upload } from "@/utils"
-import { ArrowRight, AreaChartIcon as ChartArea, Loader2 } from "lucide-react"
+import { ArrowRight, AreaChartIcon as ChartArea } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
 import { Link, useLoaderData, useNavigation } from "react-router-dom"
-import { LoadingPage } from ".."
 
 function Dashboard() {
     const { isDarkMode } = useTheme()

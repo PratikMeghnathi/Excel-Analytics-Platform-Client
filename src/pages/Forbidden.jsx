@@ -1,8 +1,6 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { AlertTriangle, ArrowLeft, Home, RefreshCw, Shield } from "lucide-react"
+import { AlertTriangle, ArrowLeft, Home, RefreshCw, Shield } from "@/utils"
 
 const usePermissionError = () => {
   const [errorMessage, setErrorMessage] = useState("")

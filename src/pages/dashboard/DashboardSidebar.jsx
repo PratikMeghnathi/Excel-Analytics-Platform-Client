@@ -154,8 +154,8 @@ function DashboardSidebar() {
                                                     setOpenMobile(false)
                                                 }}
                                                 className={`flex items-center gap-3 px-2 py-1 rounded-md transition ${isActive
-                                                        ? "bg-muted text-primary font-semibold pointer-events-none"
-                                                        : "hover:bg-muted text-foreground"
+                                                    ? "bg-muted text-primary font-semibold pointer-events-none"
+                                                    : "hover:bg-muted text-foreground"
                                                     }`}
                                             >
                                                 <item.icon className="w-5 h-5 text-primary" />
@@ -178,7 +178,7 @@ function DashboardSidebar() {
                                     {(user?.username?.[0] ?? "U").toUpperCase()}
                                 </div>
                                 {/* Name & Email */}
-                                <div className="flex-1 flex flex-col items-start min-w-0">
+                                <div className="flex-1 flex flex-col min-w-0 text-start">
                                     <span className="text-sm font-medium truncate">{user?.username ?? "User"}</span>
                                     <span className="text-xs text-muted-foreground truncate">{user?.email ?? "email@example.com"}</span>
                                 </div>

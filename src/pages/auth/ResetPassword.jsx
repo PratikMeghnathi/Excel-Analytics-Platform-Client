@@ -1,12 +1,12 @@
-"use client"
-
+import { useState, useEffect } from "react"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
+import toast from "react-hot-toast"
 import { resetPassword, verifyResetToken } from "@/api"
 import { Spinner1 } from "@/components"
-import { ERROR_TOAST_OPTIONS, PATHS, SUCCESS_TOAST_OPTIONS, TOAST_OPTIONS } from "@/utils"
-import { useState, useEffect } from "react"
-import toast from "react-hot-toast"
-import { Link, useNavigate, useSearchParams } from "react-router-dom"
-import { BarChart3, CheckCircle, AlertCircle, Lock, EyeOff, Eye, ArrowLeft } from "lucide-react"
+import {
+  ERROR_TOAST_OPTIONS, PATHS, SUCCESS_TOAST_OPTIONS,
+  BarChart3, CheckCircle, AlertCircle, Lock, EyeOff, Eye, ArrowLeft
+} from "@/utils"
 
 function ResetPassword() {
   const navigate = useNavigate()
@@ -216,13 +216,12 @@ function ResetPassword() {
                   <div className="flex items-center gap-2 mt-2">
                     <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                       <div
-                        className={`h-full transition-all duration-300 ${
-                          passwordStrength.strength === "Weak"
-                            ? "w-1/3 bg-destructive"
-                            : passwordStrength.strength === "Moderate"
-                              ? "w-2/3 bg-amber-500"
-                              : "w-full bg-green-500"
-                        }`}
+                        className={`h-full transition-all duration-300 ${passwordStrength.strength === "Weak"
+                          ? "w-1/3 bg-destructive"
+                          : passwordStrength.strength === "Moderate"
+                            ? "w-2/3 bg-amber-500"
+                            : "w-full bg-green-500"
+                          }`}
                       />
                     </div>
                     <span className={`text-xs font-medium ${passwordStrength.color}`}>{passwordStrength.strength}</span>

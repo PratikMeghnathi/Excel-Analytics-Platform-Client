@@ -305,6 +305,16 @@ body {
   animation: toast-progress 4s linear forwards;
 }
 
+.marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 8s linear infinite;
+}
+
+.marquee:hover {
+  animation-play-state: paused;
+}
+
 @keyframes toast-progress {
   0% {
     width: 100%;
@@ -312,6 +322,16 @@ body {
 
   100% {
     width: 0%;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
   }
 }
 

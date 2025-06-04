@@ -1,8 +1,6 @@
-"use client"
-
 import { PATHS } from "@/utils"
 import { Link, useNavigate } from "react-router-dom"
-import { BarChart3, Home, ArrowLeft, Search, FileQuestion, RefreshCw } from "lucide-react"
+import { BarChart3, Home, ArrowLeft, FileQuestion, RefreshCw } from "@/utils"
 
 function NotFoundPage({
   title = "Page Not Found",

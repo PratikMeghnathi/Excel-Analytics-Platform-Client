@@ -1,14 +1,14 @@
-"use client"
-
+import { useState } from "react"
+import { useImmer } from "use-immer"
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import toast from "react-hot-toast"
+import { useAuth } from "@/context"
 import { signin, forgotPassword } from "@/api"
 import { Spinner1 } from "@/components"
-import { useAuth } from "@/context"
-import { ERROR_TOAST_OPTIONS, PATHS, showGenericErrorAsToast, SUCCESS_TOAST_OPTIONS, TOAST_OPTIONS } from "@/utils"
-import { useState } from "react"
-import toast from "react-hot-toast"
-import { Link, useLocation, useNavigate } from "react-router-dom"
-import { useImmer } from "use-immer"
-import { BarChart3, Mail, Lock, AlertCircle, ArrowRight, CheckCircle } from "lucide-react"
+import {
+  ERROR_TOAST_OPTIONS, PATHS, showGenericErrorAsToast, SUCCESS_TOAST_OPTIONS,
+  BarChart3, Mail, Lock, AlertCircle, ArrowRight, CheckCircle
+} from "@/utils"
 
 function Signin() {
   const navigate = useNavigate()

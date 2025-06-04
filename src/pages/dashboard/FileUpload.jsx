@@ -24,7 +24,7 @@ function FileUpload() {
     }
   }, [response])
 
-  // Get data from dashboard context instead of useLoaderData
+  // Get data from dashboard context
   const { userPermissions, usageLimits, handleUploadSuccess, handleAnalysisSaveSuccess } = useUserAccessStatusData()
 
   const [data, setData] = useImmer({

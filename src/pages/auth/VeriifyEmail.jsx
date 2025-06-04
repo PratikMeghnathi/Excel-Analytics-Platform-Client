@@ -1,12 +1,12 @@
-"use client"
-
-import { verifyEmail, resendVerificationEmail } from "@/api"
-import { Spinner1 } from "@/components"
-import { ERROR_TOAST_OPTIONS, PATHS, SUCCESS_TOAST_OPTIONS, TOAST_OPTIONS } from "@/utils"
 import { useState, useEffect } from "react"
 import toast from "react-hot-toast"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
-import { BarChart3, CheckCircle, AlertCircle, RefreshCw, Mail, ArrowLeft } from "lucide-react"
+import {
+  ERROR_TOAST_OPTIONS, PATHS, SUCCESS_TOAST_OPTIONS,
+  BarChart3, CheckCircle, AlertCircle, RefreshCw, Mail, ArrowLeft
+} from "@/utils"
+import { verifyEmail, resendVerificationEmail } from "@/api"
+import { Spinner1 } from "@/components"
 
 function VerifyEmail() {
   const navigate = useNavigate()
@@ -89,7 +89,7 @@ function VerifyEmail() {
     }
   }
 
-  // Update the handleResendVerification function to properly handle field errors vs generic errors
+  // Handle field errors vs generic errors
   const handleResendVerification = async () => {
     if (!resendEmail.trim()) {
       toast.error("Please enter your email address.", ERROR_TOAST_OPTIONS)

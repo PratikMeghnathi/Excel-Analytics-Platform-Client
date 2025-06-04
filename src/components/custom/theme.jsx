@@ -1,4 +1,4 @@
-import { Moon, Sun, Monitor, Check } from "lucide-react";
+import { Moon, Sun, Monitor, Check } from "@/utils";
 import { useEffect, useState } from "react";
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui";
 
@@ -7,7 +7,7 @@ export function ThemeToggle({ variant = "box", className = "", children }) {
         return localStorage.getItem("theme") || "system";
     });
 
-    // Handle theme changes (not initial setup - that's done by HTML script)
+    // Handle theme changes
     useEffect(() => {
         const root = document.documentElement;
 

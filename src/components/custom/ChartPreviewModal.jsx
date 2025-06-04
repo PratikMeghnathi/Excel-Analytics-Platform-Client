@@ -1,11 +1,11 @@
-"use client"
-
-import { X, Table, Brain, Copy, Check } from "lucide-react"
-import Plot from "react-plotly.js"
 import { useState, useCallback, useEffect } from "react"
+import Plot from "react-plotly.js"
 import toast from "react-hot-toast"
 import { DataTable } from "./"
-import { ERROR_TOAST_OPTIONS, SUCCESS_TOAST_OPTIONS } from "@/utils"
+import {
+    ERROR_TOAST_OPTIONS, SUCCESS_TOAST_OPTIONS,
+    X, Table, Brain, Copy, Check
+} from "@/utils"
 
 function ChartPreviewModal({ isOpen, analysis, chartData, isLoading, onClose }) {
     const [activeTab, setActiveTab] = useState("chart") // chart, data, insights

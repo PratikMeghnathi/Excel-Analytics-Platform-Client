@@ -1,7 +1,5 @@
-"use client"
-
 import { useEffect, useState } from "react"
-import { ChevronLeft, ChevronRight, Database, ChevronDown, ChevronUp } from "lucide-react"
+import { ChevronLeft, ChevronRight, Database, ChevronDown, ChevronUp } from "@/utils"
 
 function DataTable({ data, headers, totalRows, columnTypes }) {
   const [page, setPage] = useState(0)
@@ -186,10 +184,9 @@ function DataTable({ data, headers, totalRows, columnTypes }) {
               disabled={page === 0}
               className={`
                 flex items-center gap-1 px-2 sm:px-3 py-1.5 sm:py-2 border text-xs sm:text-sm font-medium rounded-md transition-colors
-                ${
-                  page === 0
-                    ? "bg-muted text-muted-foreground cursor-not-allowed opacity-50"
-                    : "bg-background text-foreground hover:bg-muted cursor-pointer"
+                ${page === 0
+                  ? "bg-muted text-muted-foreground cursor-not-allowed opacity-50"
+                  : "bg-background text-foreground hover:bg-muted cursor-pointer"
                 }
               `}
             >
@@ -206,10 +203,9 @@ function DataTable({ data, headers, totalRows, columnTypes }) {
               disabled={page >= totalPages - 1}
               className={`
                 flex items-center gap-1 px-2 sm:px-3 py-1.5 sm:py-2 border text-xs sm:text-sm font-medium rounded-md transition-colors
-                ${
-                  page >= totalPages - 1
-                    ? "bg-muted text-muted-foreground cursor-not-allowed opacity-50"
-                    : "bg-background text-foreground hover:bg-muted cursor-pointer"
+                ${page >= totalPages - 1
+                  ? "bg-muted text-muted-foreground cursor-not-allowed opacity-50"
+                  : "bg-background text-foreground hover:bg-muted cursor-pointer"
                 }
               `}
             >
