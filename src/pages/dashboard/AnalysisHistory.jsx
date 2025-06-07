@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from "react"
 import { useNavigation } from "react-router-dom"
 import {
   prepareChartData, showGenericErrorAsToast,
-  Search, Grid, List, Shield
+  Search, Grid, List, Shield,
+  ChartArea
 } from "@/utils"
 import { deleteAnalysis, getAnalysisById } from "@/api"
 import { useTheme } from "@/hooks"
@@ -100,8 +101,8 @@ function AnalysisHistory() {
       setShowChartModal(true)
 
       try {
-        const { dataSetId, sheetIndex } = analysis
-        const { success, data, genericErrors } = await getAnalysisById(dataSetId, sheetIndex)
+        const { dataSetId, sheetIndex, _id: analaysisId } = analysis
+        const { success, data, genericErrors } = await getAnalysisById(dataSetId, sheetIndex, analaysisId)
         if (success) {
           // Prepare chart visualization data
           const chartVisualization = prepareChartData(analysis, data.rows, isDarkMode)
@@ -280,8 +281,8 @@ function AnalysisHistory() {
           <p className="text-sm mt-1">Please try refreshing the page or contact support if the problem persists.</p>
         </div>
       ) : !hasAnalyses ? (
-        <div className="bg-card p-6 sm:p-8 rounded-md text-center">
-          <div className="text-4xl sm:text-6xl mb-4">📊</div>
+        <div className="bg-card p-6 sm:p-8 rounded-md flex flex-col items-center">
+          <div className="text-4xl sm:text-6xl mb-4 text-muted-foreground"><ChartArea size={38} /></div>
           <p className="text-base sm:text-lg text-muted-foreground mb-2">No analysis history found</p>
           <p className="text-sm text-muted-foreground">Upload and analyze data to see your history here.</p>
         </div>

@@ -4,7 +4,8 @@ import toast from "react-hot-toast"
 import { DataTable } from "./"
 import {
     ERROR_TOAST_OPTIONS, SUCCESS_TOAST_OPTIONS,
-    X, Table, Brain, Copy, Check
+    X, Table, Brain, Copy, Check,
+    ChartArea
 } from "@/utils"
 
 function ChartPreviewModal({ isOpen, analysis, chartData, isLoading, onClose }) {
@@ -160,8 +161,8 @@ function ChartPreviewModal({ isOpen, analysis, chartData, isLoading, onClose }) 
                                         </div>
                                     ) : (
                                         <div className="flex justify-center items-center h-full">
-                                            <div className="text-center">
-                                                <div className="text-4xl sm:text-6xl mb-4 text-muted-foreground">📊</div>
+                                            <div className="flex flex-col items-center">
+                                                <div className="text-4xl sm:text-6xl mb-4 text-muted-foreground"><ChartArea size={38} /></div>
                                                 <p className="text-sm sm:text-base text-muted-foreground">No chart data available</p>
                                                 <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                                                     The analysis data could not be loaded

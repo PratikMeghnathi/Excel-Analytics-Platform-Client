@@ -16,11 +16,12 @@ import apiClient from "../apiClient";
  * @function getAnalysisById
  * @param {string} dataSetId - The unique identifier of the dataset.
  * @param {number} sheetIndex - The index of the sheet to retrieve within the dataset.
+ * @param {number} analaysisId - The unique identifier of the analysis.
  * @returns {Promise<ApiResponse>} The response object
  */
-const getAnalysisById = async (dataSetId, sheetIndex = 0) => {
+const getAnalysisById = async (dataSetId, sheetIndex = 0, analaysisId) => {
     try {
-        const res = await apiClient.get(`${API_ENDPOINTS.GET_ANALYSIS_BY_ID}/${dataSetId}/${sheetIndex}`);
+        const res = await apiClient.get(`${API_ENDPOINTS.GET_ANALYSIS_BY_ID}/${analaysisId}/${dataSetId}/${sheetIndex}`);
         return { success: true, data: res.data };
     } catch (error) {
         console.log('Error in api/analysis/getAnalysisById: ', error)

@@ -1,9 +1,6 @@
-"use client"
-
 import { ThemeToggle } from "@/components"
-import { PATHS } from "@/utils"
+import { PATHS, BarChart3, Menu, X } from "@/utils"
 import { Link, useLocation } from "react-router-dom"
-import { BarChart3, Menu, X } from "lucide-react"
 import { useState } from "react"
 
 function Header() {

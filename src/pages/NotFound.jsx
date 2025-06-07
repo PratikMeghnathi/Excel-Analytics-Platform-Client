@@ -1,6 +1,5 @@
-import { PATHS } from "@/utils"
+import { PATHS,BarChart3, Home, ArrowLeft, FileQuestion, RefreshCw  } from "@/utils"
 import { Link, useNavigate } from "react-router-dom"
-import { BarChart3, Home, ArrowLeft, FileQuestion, RefreshCw } from "@/utils"
 
 function NotFoundPage({
   title = "Page Not Found",

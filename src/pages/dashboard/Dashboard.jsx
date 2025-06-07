@@ -1,10 +1,7 @@
-"use client"
-
 import { getAnalysisById } from "@/api"
 import { AnalysisCard, ChartPreviewModal, Spinner1 } from "@/components"
 import { useTheme } from "@/hooks"
-import { formatDate, PATHS, prepareChartData, showGenericErrorAsToast, Upload } from "@/utils"
-import { ArrowRight, AreaChartIcon as ChartArea } from "lucide-react"
+import { formatDate, PATHS, prepareChartData, showGenericErrorAsToast, Upload, ArrowRight, AreaChartIcon as ChartArea } from "@/utils"
 import { useCallback, useEffect, useState } from "react"
 import { Link, useLoaderData, useNavigation } from "react-router-dom"
 

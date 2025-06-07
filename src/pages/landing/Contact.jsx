@@ -1,9 +1,6 @@
-"use client"
-
 import { useState } from "react"
-import { PATHS } from "@/utils"
+import { PATHS, Mail, Send, CheckCircle, MessageSquare } from "@/utils"
 import { Link } from "react-router-dom"
-import { Mail, Github, Linkedin, Send, CheckCircle, GraduationCap, Code } from "lucide-react"
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -35,30 +32,18 @@ function Contact() {
     setIsSubmitting(false)
   }
 
-  const techStack = {
-    frontend: ['React.js', 'Shadcn', 'Tailwind CSS', 'Plotly', 'THREE'],
-    backend: ['Node.js', 'Express.js', 'MongoDB', 'Xlsx'],
-    toolsAndApi: ['JWT Auth', 'Multer', 'GeminiAI API', 'Redis-stack', 'Mailjet'],
-  };
-
   const contactInfo = [
     {
       icon: Mail,
       title: "Email",
-      content: "pratikmeghnathi050@gmail.com",
-      description: "Discuss this MERN stack project or opportunities",
+      content: "support@excelanalytics.com",
+      description: "Get help with the platform or ask questions",
     },
     {
-      icon: Github,
-      title: "GitHub",
-      content: "https://github.com/PratikMeghnathi",
-      description: "View the complete source code and documentation",
-    },
-    {
-      icon: Linkedin,
-      title: "LinkedIn",
-      content: "https://www.linkedin.com/in/pratik-meghnathi-29b7402a2/",
-      description: "Connect for professional opportunities",
+      icon: MessageSquare,
+      title: "Support",
+      content: "24/7 Support Available",
+      description: "We're here to help with any questions you have",
     },
   ]
 
@@ -66,22 +51,22 @@ function Contact() {
     {
       question: "What is the Excel Analytics Platform?",
       answer:
-        "A MERN stack project for uploading Excel files, analyzing data, and generating interactive 2D/3D charts with downloadable reports.",
+        "A platform for uploading Excel files, analyzing data, and generating interactive 2D/3D charts with downloadable reports.",
     },
     {
       question: "What features does it include?",
       answer:
-        "JWT authentication, file upload/parsing, dashboard, dynamic data mapping, chart generation, AI integration, and downloadable charts (PNG/PDF).",
+        "Authentication, file upload/parsing, dashboard, dynamic data mapping, chart generation, AI integration, and downloadable charts (PNG/PDF).",
     },
     {
-      question: "What technologies were used?",
+      question: "What file formats are supported?",
       answer:
-        "Frontend: React.js, Plotly, Three.js, Tailwind CSS. Backend: Node.js, Express.js, MongoDB, Multer, Xlsx/SheetJS. Optional: GeminiAI API.",
+        "The platform supports Excel files in .xlsx and .xls formats with multiple sheet processing capabilities.",
     },
     {
-      question: "How long did this project take?",
+      question: "How do I get started?",
       answer:
-        "This is a structured 5-week project divided into 5 development modules, designed for comprehensive MERN stack learning.",
+        "Simply create an account, upload your Excel file, and start creating visualizations with our intuitive interface.",
     },
   ]
 
@@ -92,12 +77,12 @@ function Contact() {
         <div className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Get in Touch</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Have questions about this project or interested in discussing opportunities? I'd love to hear from you!
+            Have questions about the platform or need help with your data analysis? We'd love to hear from you!
           </p>
         </div>
 
         {/* Contact Information */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {contactInfo.map((info, index) => (
             <div key={index} className="bg-card border border-border rounded-lg p-6 text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -121,7 +106,7 @@ function Contact() {
                 <CheckCircle className="w-16 h-16 text-primary mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-card-foreground mb-2">Message sent!</h3>
                 <p className="text-muted-foreground mb-4">
-                  Thank you for reaching out. I'll get back to you as soon as possible.
+                  Thank you for reaching out. We'll get back to you as soon as possible.
                 </p>
                 <button
                   onClick={() => setIsSubmitted(false)}
@@ -191,7 +176,7 @@ function Contact() {
                     required
                     rows={5}
                     className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 bg-background text-foreground resize-none"
-                    placeholder="Tell me about your feedback, questions, or opportunities..."
+                    placeholder="Tell us about your feedback, questions, or how we can help..."
                   />
                 </div>
                 <button
@@ -219,55 +204,50 @@ function Contact() {
           <div className="space-y-6">
             <div className="bg-card border border-border rounded-lg p-6">
               <h3 className="text-xl font-semibold text-card-foreground mb-4 flex items-center gap-2">
-                <GraduationCap className="w-5 h-5 text-primary" />
-                About This Project
+                <MessageSquare className="w-5 h-5 text-primary" />
+                About This Platform
               </h3>
               <p className="text-muted-foreground mb-4">
-                This Excel Analytics platform was built as an internship project to showcase full-stack development
-                skills, data visualization, and modern web technologies.
+                This Excel Analytics platform was built to showcase data analysis capabilities, data visualization, and
+                modern analytics features.
               </p>
             </div>
 
             <div className="bg-card border border-border rounded-lg p-6">
               <h3 className="text-xl font-semibold text-card-foreground mb-4 flex items-center gap-2">
-                <Code className="w-5 h-5 text-primary" />
-                MERN Stack Technologies
+                <MessageSquare className="w-5 h-5 text-primary" />
+                Platform Features
               </h3>
               <div className="space-y-3">
                 <div>
-                  <p className="text-sm font-medium text-card-foreground mb-2">Frontend:</p>
+                  <p className="text-sm font-medium text-card-foreground mb-2">Core Features:</p>
                   <div className="flex flex-wrap gap-2">
-                    {
-                      techStack.frontend.map((tech, index) => (
-                        <span key={index} className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded text-sm">
-                          {tech}
-                        </span>
-                      ))
-                    }
+                    <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded text-sm">
+                      Excel Processing
+                    </span>
+                    <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded text-sm">
+                      Interactive Charts
+                    </span>
+                    <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded text-sm">
+                      3D Visualizations
+                    </span>
+                    <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded text-sm">
+                      AI Insights
+                    </span>
                   </div>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-card-foreground mb-2">Backend:</p>
+                  <p className="text-sm font-medium text-card-foreground mb-2">Export Options:</p>
                   <div className="flex flex-wrap gap-2">
-                    {
-                      techStack.backend.map((tech, index) => (
-                        <span key={index} className="bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 px-2 py-1 rounded text-sm">
-                          {tech}
-                        </span>
-                      ))
-                    }
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-card-foreground mb-2">Tools & APIs:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {
-                      techStack.toolsAndApi.map((tech, index) => (
-                        <span key={index} className="bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 px-2 py-1 rounded text-sm">
-                          {tech}
-                        </span>
-                      ))
-                    }
+                    <span className="bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 px-2 py-1 rounded text-sm">
+                      PNG/PDF
+                    </span>
+                    <span className="bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 px-2 py-1 rounded text-sm">
+                      3D Models
+                    </span>
+                    <span className="bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 px-2 py-1 rounded text-sm">
+                      Reports
+                    </span>
                   </div>
                 </div>
               </div>
@@ -305,13 +285,13 @@ function Contact() {
 
         {/* CTA Section */}
         <div className="text-center bg-muted/30 rounded-lg p-8">
-          <h2 className="text-2xl font-semibold text-foreground mb-4">Try the Demo</h2>
+          <h2 className="text-2xl font-semibold text-foreground mb-4">Try the Platform</h2>
           <p className="text-muted-foreground mb-6">
-            Explore the features and see what this internship project can accomplish.
+            Explore the features and see what this platform can accomplish with your data.
           </p>
           <Link to={PATHS.SIGNUP}>
             <button className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors font-medium">
-              Start Demo
+              Start Now
             </button>
           </Link>
         </div>

@@ -1,21 +1,6 @@
-"use client"
-
-import { PATHS } from "@/utils"
+import { PATHS, FileSpreadsheet, BarChart3, Brain, Users, Download, Settings, Database, CheckCircle, Zap, Shield, TrendingUp, } from "@/utils"
 import { Link } from "react-router-dom"
-import {
-  FileSpreadsheet,
-  BarChart3,
-  Brain,
-  Users,
-  Download,
-  Settings,
-  Database,
-  CheckCircle,
-  Zap,
-  Shield,
-  Eye,
-  TrendingUp,
-} from "lucide-react"
+import { Eye } from "lucide-react"
 
 function Features() {
   const coreFeatures = [

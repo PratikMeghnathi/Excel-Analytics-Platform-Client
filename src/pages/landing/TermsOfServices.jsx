@@ -1,43 +1,40 @@
-"use client"
-
-import { PATHS } from "@/utils"
+import { PATHS, Shield, AlertCircle, Mail, FileText } from "@/utils"
 import { Link } from "react-router-dom"
-import { Shield, AlertCircle, Mail, GraduationCap } from "lucide-react"
 
 function TermsOfServices() {
   const sections = [
     {
-      title: "1. About This Project",
-      content: `Excel Analytics Platform is a MERN stack (MongoDB, Express.js, React.js, Node.js) project designed as a 5-week structured learning experience. This platform demonstrates full-stack development capabilities for uploading Excel files, analyzing data, and generating interactive charts.`,
+      title: "1. About This Platform",
+      content: `Excel Analytics Platform is a data analysis platform designed for Excel file processing, analyzing data, and generating interactive charts. This platform demonstrates comprehensive data analysis capabilities for uploading Excel files and creating visualizations.`,
     },
     {
-      title: "2. Educational Purpose",
-      content: `This project is built as part of a structured learning curriculum to gain hands-on experience with complete application development using the MERN stack. It showcases modern web development practices and data visualization techniques.`,
+      title: "2. Platform Purpose",
+      content: `This platform is built to provide hands-on experience with data analysis and visualization. It showcases modern data processing practices and interactive chart generation techniques.`,
     },
     {
       title: "3. Platform Features",
-      content: `The platform includes Excel file upload and parsing, user authentication with JWT, interactive dashboard, data mapping with dynamic X/Y axes, chart generation (2D/3D), downloadable charts (PNG/PDF), and optional AI integration for insights.`,
+      content: `The platform includes Excel file upload and parsing, user authentication, interactive dashboard, data mapping with dynamic X/Y axes, chart generation (2D/3D), downloadable charts (PNG/PDF), and AI integration for insights.`,
     },
     {
       title: "4. Data Handling",
-      content: `Excel files (.xls or .xlsx) are processed using SheetJS/xlsx library. Data is securely stored in MongoDB with user authentication. As this is a learning project, please use sample data for testing purposes.`,
+      content: `Excel files (.xls or .xlsx) are processed and parsed for analysis. Data is securely stored with user authentication. Please use appropriate data for testing and analysis purposes.`,
     },
     {
-      title: "5. Technology Demonstration",
-      content: `This project demonstrates proficiency in React.js, Node.js, Express.js, MongoDB, Plotly for 2D/3D charts, Tailwind CSS for styling, and integration with various APIs and tools.`,
+      title: "5. Platform Capabilities",
+      content: `This platform demonstrates proficiency in data processing, interactive visualizations, chart generation, AI integration, responsive design, and integration with various analytics tools.`,
     },
   ]
 
   const keyPoints = [
     {
-      icon: GraduationCap,
-      title: "MERN Stack Project",
-      description: "Full-stack application built with MongoDB, Express.js, React.js, and Node.js over 10 weeks.",
+      icon: FileText,
+      title: "Platform Features",
+      description: "Full-featured application with Excel processing, charts, and AI analytics capabilities.",
     },
     {
       icon: Shield,
       title: "Secure & Functional",
-      description: "JWT-based authentication, secure file upload, and data processing with MongoDB storage.",
+      description: "Authentication, secure file upload, and data processing with proper storage.",
     },
     {
       icon: AlertCircle,
@@ -53,8 +50,8 @@ function TermsOfServices() {
         <div className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Terms of Service</h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Simple terms for this internship project. This platform is created for educational purposes and to showcase
-            technical development skills.
+            Simple terms for this platform. This platform is created for data analysis and to showcase analytics
+            capabilities.
           </p>
           <div className="text-sm text-muted-foreground mt-4">
             Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
@@ -76,7 +73,7 @@ function TermsOfServices() {
 
         {/* Terms Content */}
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold text-foreground text-center mb-8">Project Terms</h2>
+          <h2 className="text-2xl font-semibold text-foreground text-center mb-8">Platform Terms</h2>
           <div className="space-y-6">
             {sections.map((section, index) => (
               <div key={index} className="bg-card border border-border rounded-lg p-6">
@@ -87,13 +84,13 @@ function TermsOfServices() {
           </div>
         </div>
 
-        {/* Developer Note */}
+        {/* Platform Note */}
         <div className="bg-muted/30 rounded-lg p-8 mb-12">
           <div className="text-center">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">About the Developer</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">About the Platform</h2>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              This project was built as part of an internship to demonstrate full-stack development skills, including
-              React, Node.js, data visualization, and modern web technologies.
+              This platform was built to demonstrate data analysis capabilities, including Excel processing, data
+              visualization, and modern analytics features.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={PATHS.CONTACT}>
@@ -113,13 +110,13 @@ function TermsOfServices() {
 
         {/* CTA Section */}
         <div className="text-center bg-card border border-border rounded-lg p-8">
-          <h2 className="text-2xl font-semibold text-card-foreground mb-4">Try the Demo</h2>
+          <h2 className="text-2xl font-semibold text-card-foreground mb-4">Try the Platform</h2>
           <p className="text-muted-foreground mb-6">
-            Explore the features and see what this internship project can do with your data.
+            Explore the features and see what this platform can do with your data.
           </p>
           <Link to={PATHS.SIGNUP}>
             <button className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors font-medium">
-              Start Demo
+              Start Now
             </button>
           </Link>
         </div>

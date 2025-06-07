@@ -1,8 +1,6 @@
-"use client"
-
-import { PATHS } from "@/utils"
+import { PATHS, FileSpreadsheet, BarChart3, Brain, Users, ArrowRight, CheckCircle } from "@/utils"
 import { Link } from "react-router-dom"
-import { FileSpreadsheet, BarChart3, Brain, Users, ArrowRight, CheckCircle, Upload } from "lucide-react"
+import { Upload } from "lucide-react"
 
 function Welcome() {
   const coreFeatures = [
@@ -39,7 +37,7 @@ function Welcome() {
     "Download charts in PNG/PDF formats",
     "AI-powered insights and summary reports",
     "Dashboard with upload history and saved analyses",
-    "Modern responsive UI built with React and Tailwind CSS",
+    "Modern responsive UI with clean design",
     "Secure authentication and role-based permissions",
   ]
 
@@ -52,8 +50,8 @@ function Welcome() {
             Excel Analytics Platform
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-4xl mx-auto">
-            A powerful MERN stack platform for uploading Excel files, analyzing data, and generating interactive 2D and
-            3D charts. Transform your spreadsheet data into actionable insights with AI-powered analysis.
+            A powerful platform for uploading Excel files, analyzing data, and generating interactive 2D and 3D charts.
+            Transform your spreadsheet data into actionable insights with AI-powered analysis.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link to={PATHS.SIGNUP}>
@@ -126,29 +124,6 @@ function Welcome() {
               <p className="text-sm text-muted-foreground">
                 Upload Excel files → Parse data → Select axes → Generate interactive charts → Download or save analysis
               </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Tech Stack */}
-        <div className="bg-card border border-border rounded-lg p-6 sm:p-8 mb-12 sm:mb-16">
-          <h2 className="text-2xl font-semibold text-card-foreground text-center mb-6">Built with Modern Technology</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-            <div className="p-4">
-              <div className="text-2xl font-bold text-primary mb-1">React.js</div>
-              <div className="text-sm text-muted-foreground">Frontend</div>
-            </div>
-            <div className="p-4">
-              <div className="text-2xl font-bold text-primary mb-1">Node.js</div>
-              <div className="text-sm text-muted-foreground">Backend</div>
-            </div>
-            <div className="p-4">
-              <div className="text-2xl font-bold text-primary mb-1">MongoDB</div>
-              <div className="text-sm text-muted-foreground">Database</div>
-            </div>
-            <div className="p-4">
-              <div className="text-2xl font-bold text-primary mb-1">Chart.js</div>
-              <div className="text-sm text-muted-foreground">Visualization</div>
             </div>
           </div>
         </div>

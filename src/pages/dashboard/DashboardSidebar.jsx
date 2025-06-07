@@ -26,10 +26,9 @@ import {
     PATHS,
     showGenericErrorAsToast,
     SUCCESS_TOAST_OPTIONS,
-    TOAST_OPTIONS,
-    Upload,
+    LogOut, ShieldIcon, Trash2, AlertTriangle
 } from "@/utils"
-import { LogOut, ShieldIcon, Trash2, AlertTriangle } from "lucide-react"
+import { Upload } from "@/utils"
 import { useState, useMemo } from "react"
 import toast from "react-hot-toast"
 import { Link, useLocation, useNavigate } from "react-router-dom"
