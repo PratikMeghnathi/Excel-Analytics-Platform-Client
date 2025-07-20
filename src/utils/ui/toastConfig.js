@@ -1,5 +1,3 @@
-import toast from "react-hot-toast"
-
 export const TOAST_OPTIONS = {
     duration: 4000,
     position: "bottom-center",

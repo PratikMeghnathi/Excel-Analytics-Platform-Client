@@ -41,8 +41,8 @@ function Dashboard() {
             setShowChartModal(true)
 
             try {
-                const { dataSetId, sheetIndex } = analysis
-                const { success, data, genericErrors } = await getAnalysisById(dataSetId, sheetIndex)
+                const { dataSetId, sheetIndex, _id: analysisId } = analysis;
+                const { success, data, genericErrors } = await getAnalysisById(dataSetId, sheetIndex, analysisId)
                 if (success) {
                     // Prepare chart visualization data
                     const chartVisualization = prepareChartData(analysis, data.rows, isDarkMode)

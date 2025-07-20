@@ -10,7 +10,7 @@ import { handleApiError } from "../apiError";
 import apiClient from "../apiClient";
 
 /**
- * Requests for user authentication 
+ * Requests for user authentication
  * @async
  * @function signin
  * @param {Object} userData - user data 

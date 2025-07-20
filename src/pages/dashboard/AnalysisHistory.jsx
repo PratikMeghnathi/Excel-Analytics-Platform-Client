@@ -95,14 +95,14 @@ function AnalysisHistory() {
 
   // Function to handle when user clicks on a card
   const handleAnalysisClick = useCallback(
-    async (analysis) => {
+    async (analysis) => {      
       setIsAnalysisDataLoading(true)
       setSelectedAnalysis(analysis)
       setShowChartModal(true)
 
       try {
-        const { dataSetId, sheetIndex, _id: analaysisId } = analysis
-        const { success, data, genericErrors } = await getAnalysisById(dataSetId, sheetIndex, analaysisId)
+        const { dataSetId, sheetIndex, _id: analysisId } = analysis;
+        const { success, data, genericErrors } = await getAnalysisById(dataSetId, sheetIndex, analysisId)
         if (success) {
           // Prepare chart visualization data
           const chartVisualization = prepareChartData(analysis, data.rows, isDarkMode)

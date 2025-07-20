@@ -19,9 +19,9 @@ import apiClient from "../apiClient";
  * @param {number} analaysisId - The unique identifier of the analysis.
  * @returns {Promise<ApiResponse>} The response object
  */
-const getAnalysisById = async (dataSetId, sheetIndex = 0, analaysisId) => {
+const getAnalysisById = async (dataSetId, sheetIndex = 0, analysisId) => {
     try {
-        const res = await apiClient.get(`${API_ENDPOINTS.GET_ANALYSIS_BY_ID}/${analaysisId}/${dataSetId}/${sheetIndex}`);
+        const res = await apiClient.get(`${API_ENDPOINTS.GET_ANALYSIS_BY_ID}/${analysisId}/${dataSetId}/${sheetIndex}`);
         return { success: true, data: res.data };
     } catch (error) {
         console.log('Error in api/analysis/getAnalysisById: ', error)

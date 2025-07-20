@@ -250,6 +250,8 @@ function ChartBuilder({
         aiInsights.selectedPromptType,
       )
 
+      console.log(success, data)
+
       if (success) {
         setAiInsights((draft) => {
           draft.insights = data.data

@@ -106,5 +106,4 @@ export const API_ERROR_CODES = {
     // Generic fallbacks
     CLIENT_ERROR: 'CLIENT_ERROR',
     UNKNOWN_ERROR: 'UNKNOWN_ERROR',
-
 };
