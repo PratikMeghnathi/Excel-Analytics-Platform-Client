@@ -12,11 +12,12 @@ import toast from "react-hot-toast"
 import Plot from "react-plotly.js"
 import Plotly from "plotly.js-dist"
 import jsPDF from "jspdf"
-import * as THREE from "three"
 
+import * as THREE from "three"
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js"
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js"
+import { ConvexGeometry } from "three/examples/jsm/geometries/ConvexGeometry.js"
 
 // Chart type options
 const CHART_OPTIONS = [
@@ -826,21 +827,13 @@ function ChartBuilder({
 
           let geometry
           try {
-            // create a basic BufferGeometry
-            geometry = new THREE.BufferGeometry().setFromPoints(validPoints)
-
-            // Compute a bounding box
-            geometry.computeBoundingBox()
-
             // Try to create faces using convex hull algorithms
             if (validPoints.length > 4) {
-              try {
-                // Check if ConvexGeometry exists in THREE
-                if (typeof THREE.ConvexGeometry === "function") {
-                  geometry = new THREE.ConvexGeometry(validPoints)
-                } else {
-                  // Fallback to creating a more basic shape
-                  // Create a convex hull approximation by connecting near points
+                try{
+                  geometry = new ConvexGeometry(validPoints)
+                } catch (e) {
+                  console.warn("Failed to create convex hull, falling back to point cloud", e)
+                  // Fallback: create a simple triangulated geometry
                   const positions = new Float32Array(validPoints.length * 3)
                   const indices = []
 
@@ -852,7 +845,6 @@ function ChartBuilder({
                   }
 
                   // Create simple triangulation for visualization
-                  // Just create a fan from the first point
                   for (let i = 1; i < validPoints.length - 1; i++) {
                     indices.push(0, i, i + 1)
                   }
@@ -861,60 +853,57 @@ function ChartBuilder({
                   geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3))
                   geometry.setIndex(indices)
                 }
-              } catch (e) {
-                console.warn("Failed to create convex hull, falling back to point cloud", e)
-                // Just use points if all else fails
+              } else {
                 geometry = new THREE.BufferGeometry().setFromPoints(validPoints)
               }
+            } catch (e) {
+              console.error("Error creating mesh geometry:", e)
+              // create a basic shape
+              geometry = new THREE.SphereGeometry(3, 32, 16)
             }
-          } catch (e) {
-            console.error("Error creating mesh geometry:", e)
-            // create a basic shape
-            geometry = new THREE.SphereGeometry(3, 32, 16)
+
+            // Compute normals for proper lighting
+            geometry.computeVertexNormals()
+
+            const material = new THREE.MeshStandardMaterial({
+              color: color,
+              opacity: 0.8,
+              transparent: true,
+              side: THREE.DoubleSide,
+              flatShading: true,
+              wireframe: false,
+            })
+
+            const mesh = new THREE.Mesh(geometry, material)
+
+            // Add point cloud as well for better visualization
+            const pointsGeometry = new THREE.BufferGeometry().setFromPoints(validPoints)
+            const pointsMaterial = new THREE.PointsMaterial({
+              color: 0xffffff,
+              size: pointSize * 0.15,
+              sizeAttenuation: true,
+            })
+            const pointCloud = new THREE.Points(pointsGeometry, pointsMaterial)
+
+            // Group them together
+            const meshGroup = new THREE.Group()
+            meshGroup.add(mesh)
+            meshGroup.add(pointCloud)
+
+            // Add metadata
+            meshGroup.userData = {
+              chartType: "mesh3d",
+              pointCount: validPoints.length,
+              dataColumns: {
+                x: xAxis,
+                y: yAxis,
+                z: zAxis,
+              },
+            }
+
+            exportScene.add(meshGroup)
+            break
           }
-
-          // Compute normals for proper lighting
-          geometry.computeVertexNormals()
-
-          const material = new THREE.MeshStandardMaterial({
-            color: color,
-            opacity: 0.8,
-            transparent: true,
-            side: THREE.DoubleSide,
-            flatShading: true,
-            wireframe: false,
-          })
-
-          const mesh = new THREE.Mesh(geometry, material)
-
-          // Add point cloud as well for better visualization
-          const pointsGeometry = new THREE.BufferGeometry().setFromPoints(validPoints)
-          const pointsMaterial = new THREE.PointsMaterial({
-            color: 0xffffff,
-            size: pointSize * 0.15,
-            sizeAttenuation: true,
-          })
-          const pointCloud = new THREE.Points(pointsGeometry, pointsMaterial)
-
-          // Group them together
-          const meshGroup = new THREE.Group()
-          meshGroup.add(mesh)
-          meshGroup.add(pointCloud)
-
-          // Add metadata
-          meshGroup.userData = {
-            chartType: "mesh3d",
-            pointCount: validPoints.length,
-            dataColumns: {
-              x: xAxis,
-              y: yAxis,
-              z: zAxis,
-            },
-          }
-
-          exportScene.add(meshGroup)
-          break
-        }
 
         case "line3d": {
           const material = new THREE.LineBasicMaterial({
@@ -1002,7 +991,7 @@ function ChartBuilder({
         //   }
         // }
 
-        
+
         // Create axis labels using simple markers 
         const addAxisLabel = (text, position, color) => {
           // Create a visible marker sphere
