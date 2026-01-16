@@ -970,36 +970,51 @@ function ChartBuilder({
         const zAxis = new THREE.Line(zAxisGeom, new THREE.LineBasicMaterial({ color: 0x0000ff }))
         axesGroup.add(zAxis)
 
-        // Create actual TEXT geometry for axis labels instead of sprites
+        // // Create actual TEXT geometry for axis labels instead of sprites
+        // const addAxisLabel = (text, position, color) => {
+        //   // Create text geometry
+        //   const fontLoader = new FontLoader()
+        //   // Use system font fallback if loading fails
+        //   try {
+        //     const textGeometry = new TextGeometry(text, {
+        //       font: new THREE.Font({}), // Default placeholder font
+        //       size: 0.5,
+        //       height: 0.1,
+        //       curveSegments: 4,
+        //       bevelEnabled: false,
+        //     })
+
+        //     const textMaterial = new THREE.MeshBasicMaterial({ color: color })
+        //     const textMesh = new THREE.Mesh(textGeometry, textMaterial)
+        //     textMesh.position.copy(position)
+        //     return textMesh
+        //   } catch (e) {
+        //     // Fallback to creating a more visible marker with embedded text
+        //     const markerGeometry = new THREE.SphereGeometry(0.15, 8, 8)
+        //     const markerMaterial = new THREE.MeshBasicMaterial({ color: color })
+        //     const marker = new THREE.Mesh(markerGeometry, markerMaterial)
+        //     marker.position.copy(position)
+
+        //     // Add data attribute to the marker that will be preserved in the GLB
+        //     marker.userData = { axisLabel: text }
+
+        //     return marker
+        //   }
+        // }
+
+        
+        // Create axis labels using simple markers 
         const addAxisLabel = (text, position, color) => {
-          // Create text geometry
-          const fontLoader = new FontLoader()
-          // Use system font fallback if loading fails
-          try {
-            const textGeometry = new TextGeometry(text, {
-              font: new THREE.Font({}), // Default placeholder font
-              size: 0.5,
-              height: 0.1,
-              curveSegments: 4,
-              bevelEnabled: false,
-            })
+          // Create a visible marker sphere
+          const markerGeometry = new THREE.SphereGeometry(0.15, 8, 8)
+          const markerMaterial = new THREE.MeshBasicMaterial({ color: color })
+          const marker = new THREE.Mesh(markerGeometry, markerMaterial)
+          marker.position.copy(position)
 
-            const textMaterial = new THREE.MeshBasicMaterial({ color: color })
-            const textMesh = new THREE.Mesh(textGeometry, textMaterial)
-            textMesh.position.copy(position)
-            return textMesh
-          } catch (e) {
-            // Fallback to creating a more visible marker with embedded text
-            const markerGeometry = new THREE.SphereGeometry(0.15, 8, 8)
-            const markerMaterial = new THREE.MeshBasicMaterial({ color: color })
-            const marker = new THREE.Mesh(markerGeometry, markerMaterial)
-            marker.position.copy(position)
+          // Store the axis label in userData so it's preserved in the GLB export
+          marker.userData = { axisLabel: text }
 
-            // Add data attribute to the marker that will be preserved in the GLB
-            marker.userData = { axisLabel: text }
-
-            return marker
-          }
+          return marker
         }
 
         const xLabelPos = new THREE.Vector3(6.5, 0, 0)
