@@ -9,7 +9,8 @@
  * @default 'http://localhost:8080/api'
  */
 
-export const API_BASE_URL = import.meta.env.VITE_ENV === "production" ? import.meta.env.VITE_API_BASE_URL : import.meta.env.VITE_LOCAL_API_BASE_URL
+export const VITE_ENV = import.meta.env.VITE_ENV;
+export const API_BASE_URL = VITE_ENV === "production" ? import.meta.env.VITE_API_BASE_URL : import.meta.env.VITE_LOCAL_API_BASE_URL
 
 /**
  * Collection of API endpoints organized by feature
